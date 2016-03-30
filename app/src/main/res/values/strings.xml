@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Zap</string>
+
+    <!-- Main Activity strings -->
+    <string name="toggle_available">Become Available</string>
+    <string name="toggle_unavailable">Become Unavailable</string>
+    <string name="available">Available</string>
+    <string name="unavailable">Unavailable</string>
+    <string name="activity">(Optional) I want to:</string>
 </resources>

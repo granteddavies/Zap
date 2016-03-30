@@ -12,5 +12,28 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="50dp"
+        android:id="@+id/textAvailable"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <ToggleButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15dp"
+        android:textOn="@string/toggle_available"
+        android:textOff="@string/toggle_unavailable"
+        android:id="@+id/toggleAvailable"
+        android:layout_below="@+id/textAvailable"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editActivity"
+        android:layout_below="@+id/toggleAvailable"
+        android:layout_centerHorizontal="true"
+        android:hint="@string/activity"/>
+
 </RelativeLayout>
