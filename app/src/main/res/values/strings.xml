@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Zap</string>
+    <string name="facebook_app_id">838256642987436</string>
 
     <!-- Main Activity strings -->
     <string name="toggle_available">Become Available</string>
