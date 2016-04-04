@@ -2,10 +2,14 @@
     <string name="app_name">Zap</string>
     <string name="facebook_app_id">838256642987436</string>
 
+    <!-- Menu strings -->
+    <string name="logout">Log Out</string>
+
     <!-- Main Activity strings -->
     <string name="toggle_available">Become Available</string>
     <string name="toggle_unavailable">Become Unavailable</string>
     <string name="available">Available</string>
     <string name="unavailable">Unavailable</string>
     <string name="activity">(Optional) I want to:</string>
+    <string name="title_activity_test">test</string>
 </resources>
