@@ -6,10 +6,14 @@
     <string name="logout">Log Out</string>
 
     <!-- Main Activity strings -->
-    <string name="toggle_available">Become Available</string>
-    <string name="toggle_unavailable">Become Unavailable</string>
-    <string name="available">Available</string>
-    <string name="unavailable">Unavailable</string>
+    <string name="toggle_available">Available</string>
+    <string name="toggle_unavailable">Unavailable</string>
     <string name="activity">(Optional) I want to:</string>
     <string name="title_activity_test">test</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
