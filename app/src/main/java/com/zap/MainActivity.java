@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
             switch (position) {
                 case 0:
                     // Friends
-                    return PlaceholderFragment.newInstance();
+                    return FriendsFragment.newInstance();
                 case 1:
                     // Main
                     return MainFragment.newInstance();
