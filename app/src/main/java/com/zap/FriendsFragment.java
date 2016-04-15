@@ -75,8 +75,10 @@ public class FriendsFragment extends Fragment {
                             JSONArray fbFriends = response.getJSONObject().getJSONArray("data");
                             if (fbFriends != null) {
                                 for (int i = 0; i < fbFriends.length(); i++) {
-                                    JSONObject friend = fbFriends.getJSONObject(i);
-                                    friends.add(new Friend(friend.getString("name")));
+                                    JSONObject fbFriend = fbFriends.getJSONObject(i);
+                                    Friend friend = new Friend(fbFriend.getString("name"),
+                                            fbFriend.getString("id"));
+                                    friends.add(friend);
                                 }
                             }
                         } catch (JSONException e) {

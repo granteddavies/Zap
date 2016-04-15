@@ -7,9 +7,11 @@ import com.orm.SugarRecord;
  */
 public class Friend extends SugarRecord {
     private String name;
+    private String fid;
 
-    public Friend(String name) {
+    public Friend(String name, String fid) {
         this.name = name;
+        this.fid = fid;
     }
 
     public void setName(String name) {
@@ -18,5 +20,13 @@ public class Friend extends SugarRecord {
 
     public String getName() {
         return name;
+    }
+
+    public void setFid(String fid) {
+        this.fid = fid;
+    }
+
+    public String getFid() {
+        return fid;
     }
 }
