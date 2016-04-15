@@ -10,10 +10,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
+import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 
 public class FriendsFragment extends Fragment {
+
+    private ArrayList<Friend> friends = new ArrayList<Friend>();
+    private FriendsAdapter adapter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -37,32 +49,43 @@ public class FriendsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_friend_list, container, false);
 
-        ArrayList<String> list = getFriends();
+        Context context = view.getContext();
+        adapter = new FriendsAdapter(friends, context);
 
         if (view instanceof RecyclerView) {
-            Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            recyclerView.setAdapter(new FriendsAdapter(list, context));
+            recyclerView.setAdapter(adapter);
         }
+
+        loadFriends();
+
         return view;
     }
 
-    private ArrayList<String> getFriends() {
-        ArrayList<String> list = new ArrayList<String>();
-        list.add("Angus");
-        list.add("Nick");
-        list.add("Logan");
-        list.add("Garrett");
-        list.add("Bryan");
-        list.add("Malcolm");
-        list.add("Robert");
-        list.add("Alex");
-        list.add("Joe");
-        list.add("Kenzie");
-        list.add("Jared");
-        list.add("Eric");
-        list.add("Tori");
-        return list;
+    private void loadFriends() {
+        new GraphRequest(
+                AccessToken.getCurrentAccessToken(),
+                "/me/friends",
+                null,
+                HttpMethod.GET,
+                new GraphRequest.Callback() {
+                    public void onCompleted(GraphResponse response) {
+                        try {
+                            JSONArray fbFriends = response.getJSONObject().getJSONArray("data");
+                            if (fbFriends != null) {
+                                for (int i = 0; i < fbFriends.length(); i++) {
+                                    JSONObject friend = fbFriends.getJSONObject(i);
+                                    friends.add(new Friend(friend.getString("name")));
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        adapter.notifyDataSetChanged();
+                    }
+                }
+        ).executeAsync();
     }
 }
