@@ -79,6 +79,9 @@ public class FriendsFragment extends Fragment {
                                             fbFriend.getString("id"));
                                     friends.add(friend);
                                 }
+
+                                // TODO: remove this test line
+                                friends.add(Profile.user);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

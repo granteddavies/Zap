@@ -59,6 +59,8 @@ public class MainFragment extends Fragment {
             }
         });
 
+        updateUI(Profile.user.getAvailable());
+
         return rootView;
     }
 
@@ -66,6 +68,13 @@ public class MainFragment extends Fragment {
      * Toggle the user's availability
      */
     private void toggleAvailable(boolean isAvailable) {
+        Profile.user.setAvailable(isAvailable);
+        Profile.user.save();
+        updateUI(isAvailable);
+    }
+
+    private void updateUI(boolean isAvailable) {
+        toggleAvailable.setChecked(isAvailable);
         if (isAvailable) {
             toggleAvailable.setTextColor(Color.GREEN);
         }

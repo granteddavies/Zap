@@ -11,6 +11,9 @@ public class User extends SugarRecord {
     private boolean available;
     private String activity;
 
+    public User() {
+    }
+
     public User(String name, String fid) {
         this.name = name;
         this.fid = fid;
