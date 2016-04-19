@@ -10,9 +10,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendViewHolder> {
-    private ArrayList<Friend> friendList;
+    private ArrayList<User> friendList;
 
-    public FriendsAdapter(ArrayList<Friend> friendList, Context context) {
+    public FriendsAdapter(ArrayList<User> friendList, Context context) {
         this.friendList = friendList;
     }
 
@@ -38,7 +38,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendVi
 
         public FriendViewHolder(View itemView) {
             super(itemView);
-            text = (TextView) itemView.findViewById(R.id.id);
+            text = (TextView) itemView.findViewById(R.id.name);
         }
     }
 }

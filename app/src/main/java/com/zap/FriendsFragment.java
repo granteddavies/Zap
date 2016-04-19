@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
@@ -24,7 +23,7 @@ import java.util.ArrayList;
 
 public class FriendsFragment extends Fragment {
 
-    private ArrayList<Friend> friends = new ArrayList<Friend>();
+    private ArrayList<User> friends = new ArrayList<User>();
     private FriendsAdapter adapter;
 
     /**
@@ -76,7 +75,7 @@ public class FriendsFragment extends Fragment {
                             if (fbFriends != null) {
                                 for (int i = 0; i < fbFriends.length(); i++) {
                                     JSONObject fbFriend = fbFriends.getJSONObject(i);
-                                    Friend friend = new Friend(fbFriend.getString("name"),
+                                    User friend = new User(fbFriend.getString("name"),
                                             fbFriend.getString("id"));
                                     friends.add(friend);
                                 }
