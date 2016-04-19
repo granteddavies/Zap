@@ -9,8 +9,15 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -26,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // Check if the user is already logged in
         if (AccessToken.getCurrentAccessToken() != null) {
-            startMainActivity();
+            loadProfile();
         }
 
         callbackManager = CallbackManager.Factory.create();
@@ -35,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                startMainActivity();
+                loadProfile();
             }
 
             @Override
@@ -61,5 +68,25 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    private void loadProfile() {
+        new GraphRequest(
+                AccessToken.getCurrentAccessToken(),
+                "/me",
+                null,
+                HttpMethod.GET,
+                new GraphRequest.Callback() {
+                    public void onCompleted(GraphResponse response) {
+                        try {
+                            JSONObject jObj = response.getJSONObject();
+                            Profile.user = new User(jObj.getString("name"), jObj.getString("id"));
+                            startMainActivity();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+        ).executeAsync();
     }
 }
