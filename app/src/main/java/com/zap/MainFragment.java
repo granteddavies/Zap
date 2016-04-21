@@ -11,6 +11,8 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+import com.microsoft.windowsazure.mobileservices.http.ServiceFilterResponse;
+import com.microsoft.windowsazure.mobileservices.table.TableOperationCallback;
 
 public class MainFragment extends Fragment {
 
@@ -69,7 +71,8 @@ public class MainFragment extends Fragment {
      */
     private void toggleAvailable(boolean isAvailable) {
         Profile.user.setAvailable(isAvailable);
-        Profile.user.save();
+        // TODO: remove?
+        // Profile.user.save();
         updateUI(isAvailable);
     }
 

@@ -1,8 +1,10 @@
 package com.zap;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Pair;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -14,13 +16,19 @@ import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.orm.SugarContext;
-import com.orm.util.SugarConfig;
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
+import com.microsoft.windowsazure.mobileservices.MobileServiceList;
+import com.microsoft.windowsazure.mobileservices.http.ServiceFilterResponse;
+import com.microsoft.windowsazure.mobileservices.table.TableOperationCallback;
+import com.microsoft.windowsazure.mobileservices.table.query.Query;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
@@ -32,7 +40,15 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SugarContext.init(getApplicationContext());
+        try {
+            Profile.mClient = new MobileServiceClient(
+                    "https://zap.azure-mobile.net/",
+                    "gOXIOvUOmvTWGEknrVggIjHFdmzycc64",
+                    getApplicationContext()
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
@@ -71,9 +87,15 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void startMainActivity() {
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish();
+        runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
     private void loadProfile() {
@@ -87,27 +109,64 @@ public class LoginActivity extends AppCompatActivity {
                         try {
                             JSONObject jObj = response.getJSONObject();
 
-                            List result = User.find(User.class, "fid = ?", jObj.getString("id"));
+                            Profile.user = new User(jObj.getString("name"), jObj.getString("id"));
 
-                            if (result.size() != 1) {
-                                for (int i = 0; i < result.size(); i++) {
-                                    ((User) result.get(i)).delete();
-                                }
-                                Profile.user = new User(jObj.getString("name"), jObj.getString("id"));
-                                Profile.user.setAvailable(false);
-                                Profile.user.setActivity(null);
-                                Profile.user.save();
-                            }
-                            else {
-                                Profile.user = (User) result.get(0);
-                            }
+                            initializeProfile();
 
-                            startMainActivity();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
                 }
         ).executeAsync();
+    }
+
+    public void initializeProfile() {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    final MobileServiceList<User> result =
+                            Profile.mClient.getTable(User.class).where()
+                                    .field("fid").eq(Profile.user.getFid())
+                                    .execute().get();
+
+                    if (result.size() == 0) {
+                        System.out.println("TEST inserting user");
+                        Profile.user.setAvailable(false);
+                        Profile.user.setActivity(null);
+                        insertUser();
+                    }
+                    else if (result.size() == 1) {
+                        System.out.println("TEST using server user");
+                        Profile.user = result.get(0);
+                        startMainActivity();
+                    }
+                    else {
+                        throw new RuntimeException("Unexpected number of matches for profile user");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return null;
+            }
+        }.execute();
+    }
+
+    public void insertUser() {
+        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    Profile.mClient.getTable(User.class).insert(Profile.user).get();
+                    startMainActivity();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        }.execute();
     }
 }

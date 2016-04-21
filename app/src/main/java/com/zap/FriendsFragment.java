@@ -72,6 +72,8 @@ public class FriendsFragment extends Fragment {
                     public void onCompleted(GraphResponse response) {
                         try {
                             JSONArray fbFriends = response.getJSONObject().getJSONArray("data");
+
+                            friends.clear();
                             if (fbFriends != null) {
                                 for (int i = 0; i < fbFriends.length(); i++) {
                                     JSONObject fbFriend = fbFriends.getJSONObject(i);
@@ -79,9 +81,6 @@ public class FriendsFragment extends Fragment {
                                             fbFriend.getString("id"));
                                     friends.add(friend);
                                 }
-
-                                // TODO: remove this test line
-                                friends.add(Profile.user);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

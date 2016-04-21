@@ -1,18 +1,16 @@
 package com.zap;
 
-import com.orm.SugarRecord;
 
 /**
  * Created by Grant on 4/14/2016.
  */
-public class User extends SugarRecord {
+public class User {
+    public String Id;
     private String name;
     private String fid;
     private boolean available;
     private String activity;
 
-    public User() {
-    }
 
     public User(String name, String fid) {
         this.name = name;
