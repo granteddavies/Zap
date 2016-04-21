@@ -132,13 +132,11 @@ public class LoginActivity extends AppCompatActivity {
                                     .execute().get();
 
                     if (result.size() == 0) {
-                        System.out.println("TEST inserting user");
                         Profile.user.setAvailable(false);
                         Profile.user.setActivity(null);
                         insertUser();
                     }
                     else if (result.size() == 1) {
-                        System.out.println("TEST using server user");
                         Profile.user = result.get(0);
                         startMainActivity();
                     }
