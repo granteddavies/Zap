@@ -5,16 +5,15 @@ package com.zap;
  * Created by Grant on 4/14/2016.
  */
 public class User {
-    public String Id;
+    private String id;
     private String name;
-    private String fid;
     private boolean available;
     private String activity;
 
 
-    public User(String name, String fid) {
+    public User(String name, String id) {
         this.name = name;
-        this.fid = fid;
+        this.id = id;
         available = false;
         activity = null;
     }
@@ -27,12 +26,12 @@ public class User {
         return name;
     }
 
-    public void setFid(String fid) {
-        this.fid = fid;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getFid() {
-        return fid;
+    public String getId() {
+        return id;
     }
 
     public void setAvailable(boolean available) {

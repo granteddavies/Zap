@@ -110,7 +110,7 @@ public class FriendsFragment extends Fragment {
                     try {
                         final MobileServiceList<User> result =
                                 Profile.mClient.getTable(User.class).where()
-                                        .field("fid").eq(friend.getFid())
+                                        .field("id").eq(friend.getId())
                                         .execute().get();
 
                         if (result.size() == 1) {

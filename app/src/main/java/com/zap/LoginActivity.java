@@ -118,7 +118,7 @@ public class LoginActivity extends AppCompatActivity {
                 try {
                     final MobileServiceList<User> result =
                             Profile.mClient.getTable(User.class).where()
-                                    .field("fid").eq(Profile.user.getFid())
+                                    .field("id").eq(Profile.user.getId())
                                     .execute().get();
 
                     if (result.size() == 0) {
