@@ -4,20 +4,15 @@ package com.zap;
  * Created by Grant on 4/24/2016.
  */
 public class Invite {
-    public enum Status {
-        YES, NO, MAYBE, PENDING
-    }
-
     private String id;
     private String eventId;
     private String recipientId;
-    private Status status;
+    private String status;
 
-    public Invite(String id, String eventId, String recipientId, Status status) {
-        this.id = id;
+    public Invite(String eventId, String recipientId) {
         this.eventId = eventId;
         this.recipientId = recipientId;
-        status = Status.PENDING;
+        status = EventData.STATUS_PENDING;
     }
 
     public String getId() {
@@ -32,11 +27,11 @@ public class Invite {
         return recipientId;
     }
 
-    public Status getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 }

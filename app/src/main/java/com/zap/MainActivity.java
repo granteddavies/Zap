@@ -1,6 +1,7 @@
 package com.zap;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +21,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.facebook.login.LoginManager;
+
+import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -58,13 +62,23 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                // TODO: Remove test logic
+                //runTest();
+                //
             }
         });
 
     }
 
+    // TODO: Remove test logic
+    private void runTest() {
+        Calendar cal = Calendar.getInstance();
+        Event event = new Event(Profile.user.getId(), "Test Title", "Test Description", cal.getTime(), cal.getTime());
+        EventData eventData = new EventData(event);
+        eventData.addInvite(new Invite(null, Profile.user.getId()));
+        eventData.submit(this);
+    }
+    //
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
