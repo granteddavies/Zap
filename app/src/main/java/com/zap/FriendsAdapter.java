@@ -1,6 +1,7 @@
 package com.zap;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +26,23 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendVi
 
     @Override
     public void onBindViewHolder(FriendsAdapter.FriendViewHolder holder, int position) {
-        holder.text.setText(friendList.get(position).getName());
+        holder.name.setText(friendList.get(position).getName());
+
+        boolean available = friendList.get(position).getAvailable();
+        if (available) {
+            String activity = friendList.get(position).getActivity();
+            if (activity != null) {
+                holder.availability.setText(activity);
+            }
+            else {
+                holder.availability.setText(R.string.available);
+            }
+            holder.availability.setTextColor(Color.BLACK);
+        }
+        else {
+            holder.availability.setText(R.string.unavailable);
+            holder.availability.setTextColor(Color.GRAY);
+        }
     }
 
     @Override
@@ -34,11 +51,13 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendVi
     }
 
     public static class FriendViewHolder extends RecyclerView.ViewHolder {
-        protected TextView text;
+        protected TextView name;
+        protected TextView availability;
 
         public FriendViewHolder(View itemView) {
             super(itemView);
-            text = (TextView) itemView.findViewById(R.id.name);
+            name = (TextView) itemView.findViewById(R.id.name);
+            availability = (TextView) itemView.findViewById(R.id.availability);
         }
     }
 }

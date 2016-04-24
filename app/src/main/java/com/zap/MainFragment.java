@@ -1,6 +1,7 @@
 package com.zap;
 
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.KeyEvent;
@@ -71,9 +72,7 @@ public class MainFragment extends Fragment {
      */
     private void toggleAvailable(boolean isAvailable) {
         Profile.user.setAvailable(isAvailable);
-        // TODO: remove?
-        // Profile.user.save();
-        updateUI(isAvailable);
+        updateUser();
     }
 
     private void updateUI(boolean isAvailable) {
@@ -84,5 +83,25 @@ public class MainFragment extends Fragment {
         else {
             toggleAvailable.setTextColor(Color.RED);
         }
+    }
+
+    private void updateUser() {
+        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    Profile.mClient.getTable(User.class).update(Profile.user).get();
+                    getActivity().runOnUiThread(new Runnable() {
+                        public void run() {
+                            updateUI(Profile.user.getAvailable());
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        }.execute();
     }
 }

@@ -1,6 +1,7 @@
 package com.zap;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +14,7 @@ import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
+import com.microsoft.windowsazure.mobileservices.MobileServiceList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -82,6 +84,12 @@ public class FriendsFragment extends Fragment {
                                     friends.add(friend);
                                 }
                             }
+
+                            // TODO: remove this test line
+                            friends.add(Profile.user);
+                            //
+
+                            initializeFriends();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -90,5 +98,41 @@ public class FriendsFragment extends Fragment {
                     }
                 }
         ).executeAsync();
+    }
+
+    private void initializeFriends() {
+        for (int i = 0; i < friends.size(); i++) {
+            final int index = i;
+            final User friend = friends.get(index);
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    try {
+                        final MobileServiceList<User> result =
+                                Profile.mClient.getTable(User.class).where()
+                                        .field("fid").eq(friend.getFid())
+                                        .execute().get();
+
+                        if (result.size() == 1) {
+                            getActivity().runOnUiThread(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    friends.set(index, result.get(0));
+                                    adapter.notifyDataSetChanged();
+                                }
+                            });
+                        }
+                        else {
+                            throw new RuntimeException("Unexpected number of matches for profile user");
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    return null;
+                }
+            }.execute();
+        }
     }
 }
