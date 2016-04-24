@@ -123,6 +123,17 @@ public class FriendsFragment extends Fragment {
                                 }
                             });
                         }
+                        else if (result.size() == 0) {
+                            getActivity().runOnUiThread(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    friend.setAvailable(false);
+                                    friend.setActivity(null);
+                                    adapter.notifyDataSetChanged();
+                                }
+                            });
+                        }
                         else {
                             throw new RuntimeException("Unexpected number of matches for profile user");
                         }
