@@ -12,25 +12,22 @@ import java.util.Date;
  */
 public class Event {
     private String id;
-    private String hostFid;
+    private String hostId;
     private String title;
     private String description;
     private Date startTime;
     private Date endTime;
 
-    private ArrayList<Invite> invites;
-
     public Event(String hostFid, String title, String description, Date startTime, Date endTime) {
-        this.hostFid = hostFid;
+        this.hostId = hostFid;
         this.title = title;
         this.description = description;
         this. startTime = startTime;
         this.endTime = endTime;
-        invites = new ArrayList<>();
     }
 
-    public String getHostFid() {
-        return hostFid;
+    public String getHostId() {
+        return hostId;
     }
 
     public String getTitle() {
@@ -49,11 +46,8 @@ public class Event {
         return endTime;
     }
 
-    public ArrayList<Invite> getInvites() {
-        return invites;
-    }
 
-    public void addInvite(Invite invite) {
-        invites.add(invite);
+    public String getId() {
+        return id;
     }
 }
