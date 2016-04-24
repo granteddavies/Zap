@@ -1,6 +1,5 @@
 package com.zap;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -8,22 +7,28 @@ import java.util.Date;
  */
 public class Event {
     private String id;
-    private String hostId;
+    private String hostid;
+    private String hostname;
     private String title;
     private String description;
-    private Date startTime;
-    private Date endTime;
+    private Date starttime;
+    private Date endtime;
 
-    public Event(String hostFid, String title, String description, Date startTime, Date endTime) {
-        this.hostId = hostFid;
+    public Event(String hostFid, String hostName, String title, String description, Date startTime, Date endTime) {
+        this.hostid = hostFid;
+        this.hostname = hostName;
         this.title = title;
         this.description = description;
-        this. startTime = startTime;
-        this.endTime = endTime;
+        this.starttime = startTime;
+        this.endtime = endTime;
     }
 
-    public String getHostId() {
-        return hostId;
+    public String getHostid() {
+        return hostid;
+    }
+
+    public String getHostname() {
+        return hostname;
     }
 
     public String getTitle() {
@@ -34,12 +39,12 @@ public class Event {
         return description;
     }
 
-    public Date getStartTime() {
-        return startTime;
+    public Date getStarttime() {
+        return starttime;
     }
 
-    public Date getEndTime() {
-        return endTime;
+    public Date getEndtime() {
+        return endtime;
     }
 
 

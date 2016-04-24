@@ -42,13 +42,9 @@ public class EventData {
                 try {
                     Profile.mClient.getTable(Event.class).insert(event).get();
                     for (Invite invite : invites) {
+                        invite.setEventid(event.getId());
                         Profile.mClient.getTable(Invite.class).insert(invite).get();
                     }
-                    context.runOnUiThread(new Runnable() {
-                        public void run() {
-                            System.out.println("TEST");
-                        }
-                    });
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

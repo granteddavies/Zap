@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // TODO: Remove test logic
-                //runTest();
+                runTest();
                 //
             }
         });
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     // TODO: Remove test logic
     private void runTest() {
         Calendar cal = Calendar.getInstance();
-        Event event = new Event(Profile.user.getId(), "Test Title", "Test Description", cal.getTime(), cal.getTime());
+        Event event = new Event(Profile.user.getId(), Profile.user.getName(), "Test Title", "Test Description", cal.getTime(), cal.getTime());
         EventData eventData = new EventData(event);
         eventData.addInvite(new Invite(null, Profile.user.getId()));
         eventData.submit(this);
@@ -101,36 +101,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        public PlaceholderFragment() {
-        }
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance() {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return null;
-        }
-    }
-
-    /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
@@ -153,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
                     return MainFragment.newInstance();
                 case 2:
                     // Events
-                    return PlaceholderFragment.newInstance();
+                    return EventsFragment.newInstance();
             }
             return null;
         }

@@ -5,26 +5,30 @@ package com.zap;
  */
 public class Invite {
     private String id;
-    private String eventId;
-    private String recipientId;
+    private String eventid;
+    private String recipientid;
     private String status;
 
     public Invite(String eventId, String recipientId) {
-        this.eventId = eventId;
-        this.recipientId = recipientId;
+        this.eventid = eventId;
+        this.recipientid = recipientId;
         status = EventData.STATUS_PENDING;
+    }
+
+    public void setEventid(String eventid) {
+        this.eventid = eventid;
     }
 
     public String getId() {
         return id;
     }
 
-    public String getEventId() {
-        return eventId;
+    public String getEventid() {
+        return eventid;
     }
 
-    public String getRecipientId() {
-        return recipientId;
+    public String getRecipientid() {
+        return recipientid;
     }
 
     public String getStatus() {

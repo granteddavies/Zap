@@ -25,7 +25,7 @@ import java.util.ArrayList;
 
 public class FriendsFragment extends Fragment {
 
-    private ArrayList<User> friends = new ArrayList<User>();
+    private ArrayList<User> friends = new ArrayList<>();
     private FriendsAdapter adapter;
 
     /**
@@ -94,7 +94,7 @@ public class FriendsFragment extends Fragment {
                             e.printStackTrace();
                         }
 
-                        adapter.notifyDataSetChanged();
+                        updateAdapter();
                     }
                 }
         ).executeAsync();
@@ -119,7 +119,7 @@ public class FriendsFragment extends Fragment {
                                 @Override
                                 public void run() {
                                     friends.set(index, result.get(0));
-                                    adapter.notifyDataSetChanged();
+                                    updateAdapter();
                                 }
                             });
                         }
@@ -130,7 +130,7 @@ public class FriendsFragment extends Fragment {
                                 public void run() {
                                     friend.setAvailable(false);
                                     friend.setActivity(null);
-                                    adapter.notifyDataSetChanged();
+                                    updateAdapter();
                                 }
                             });
                         }
@@ -145,5 +145,15 @@ public class FriendsFragment extends Fragment {
                 }
             }.execute();
         }
+    }
+
+    private void updateAdapter() {
+        getActivity().runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 }
