@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.zap.EventDetailsActivity"
+    tools:showIn="@layout/activity_event_details">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Alexander Hammond"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:id="@+id/hostText"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Hang Out"
+        android:textSize="27dp"
+        android:id="@+id/titleText"
+        android:layout_below="@+id/hostText"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Starts at 4:00PM"
+        android:textSize="20dp"
+        android:id="@+id/startTimeText"
+        android:layout_below="@+id/titleText"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Expires at 8:00PM"
+        android:textSize="20dp"
+        android:id="@+id/endTimeText"
+        android:layout_below="@+id/startTimeText"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ultrices ligula lorem, a ultricies velit sagittis consequat."
+        android:textSize="17dp"
+        android:id="@+id/descriptionText"
+        android:layout_below="@+id/endTimeText"
+        android:layout_alignParentStart="true" />
+
+    <ToggleButton
+        android:layout_width="131dp"
+        android:layout_height="50dp"
+        android:textOn="@string/maybe"
+        android:textOff="@string/maybe"
+        android:background="#999900"
+        android:id="@+id/toggleMaybe"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="50dp" />
+
+    <ToggleButton
+        android:layout_width="131dp"
+        android:layout_height="50dp"
+        android:textOn="@string/cant"
+        android:textOff="@string/cant"
+        android:background="#990000"
+        android:id="@+id/toggleCant"
+        android:layout_alignTop="@+id/toggleMaybe"
+        android:layout_alignEnd="@+id/descriptionText" />
+
+    <ToggleButton
+        android:layout_width="131dp"
+        android:layout_height="50dp"
+        android:textOn="@string/yes"
+        android:textOff="@string/yes"
+        android:background="#009900"
+        android:id="@+id/toggleYes"
+        android:layout_alignTop="@+id/toggleMaybe"
+        android:layout_alignStart="@+id/descriptionText" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/other_members"
+        android:id="@+id/otherMembersText"
+        android:layout_centerVertical="true"
+        android:layout_alignStart="@+id/descriptionText" />
+
+    <include layout="@layout/event_member_list"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/otherMembersList"
+        android:layout_below="@+id/otherMembersText"
+        android:layout_above="@+id/toggleMaybe" />
+
+</RelativeLayout>
