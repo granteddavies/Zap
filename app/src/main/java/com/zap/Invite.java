@@ -7,12 +7,18 @@ public class Invite {
     private String id;
     private String eventid;
     private String recipientid;
+    private String recipientname;
     private String status;
 
-    public Invite(String eventId, String recipientId) {
-        this.eventid = eventId;
-        this.recipientid = recipientId;
+    public Invite(String eventid, String recipientid, String recipientname) {
+        this.eventid = eventid;
+        this.recipientid = recipientid;
+        this.recipientname = recipientname;
         status = EventData.STATUS_PENDING;
+    }
+
+    public String getRecipientname() {
+        return recipientname;
     }
 
     public void setEventid(String eventid) {

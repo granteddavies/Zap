@@ -16,6 +16,8 @@
     <!-- Event Details Activity strings -->
     <string name="yes">YES</string>
     <string name="maybe">MAYBE</string>
-    <string name="cant">CAN'T</string>
+    <string name="cant">CAN\'T</string>
     <string name="other_members">Other Members:</string>
+    <string name="start_time">At </string>
+    <string name="end_time">Expires at </string>
 </resources>

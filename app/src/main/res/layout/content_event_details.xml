@@ -65,36 +65,43 @@
         android:layout_below="@+id/endTimeText"
         android:layout_alignParentStart="true" />
 
-    <ToggleButton
-        android:layout_width="131dp"
-        android:layout_height="50dp"
-        android:textOn="@string/maybe"
-        android:textOff="@string/maybe"
-        android:background="#999900"
-        android:id="@+id/toggleMaybe"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="50dp" />
 
-    <ToggleButton
-        android:layout_width="131dp"
-        android:layout_height="50dp"
-        android:textOn="@string/cant"
-        android:textOff="@string/cant"
-        android:background="#990000"
-        android:id="@+id/toggleCant"
-        android:layout_alignTop="@+id/toggleMaybe"
-        android:layout_alignEnd="@+id/descriptionText" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/statusButtons"
+        android:layout_alignParentBottom="true">
 
-    <ToggleButton
-        android:layout_width="131dp"
-        android:layout_height="50dp"
-        android:textOn="@string/yes"
-        android:textOff="@string/yes"
-        android:background="#009900"
-        android:id="@+id/toggleYes"
-        android:layout_alignTop="@+id/toggleMaybe"
-        android:layout_alignStart="@+id/descriptionText" />
+        <ToggleButton
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:textOn="@string/yes"
+            android:textOff="@string/yes"
+            android:background="#009900"
+            android:id="@+id/toggleYes"
+            android:layout_weight="1" />
+
+        <ToggleButton
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:textOn="@string/maybe"
+            android:textOff="@string/maybe"
+            android:background="#999900"
+            android:id="@+id/toggleMaybe"
+            android:layout_weight="1"/>
+
+        <ToggleButton
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:textOn="@string/cant"
+            android:textOff="@string/cant"
+            android:background="#990000"
+            android:id="@+id/toggleCant"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+
 
     <TextView
         android:layout_width="wrap_content"
@@ -111,6 +118,6 @@
         android:layout_centerHorizontal="true"
         android:id="@+id/otherMembersList"
         android:layout_below="@+id/otherMembersText"
-        android:layout_above="@+id/toggleMaybe" />
+        android:layout_above="@+id/statusButtons" />
 
 </RelativeLayout>

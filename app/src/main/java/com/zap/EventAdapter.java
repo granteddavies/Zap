@@ -1,6 +1,8 @@
 package com.zap;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,9 +13,11 @@ import java.util.ArrayList;
 
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
     private ArrayList<Event> eventList;
+    private Context context;
 
     public EventAdapter(ArrayList<Event> eventList, Context context) {
         this.eventList = eventList;
+        this.context = context;
     }
 
     @Override
@@ -27,6 +31,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     public void onBindViewHolder(EventAdapter.EventViewHolder holder, int position) {
         holder.host.setText(eventList.get(position).getHostname());
         holder.title.setText(eventList.get(position).getTitle());
+        holder.setClickable(eventList.get(position).getId(), context);
     }
 
     @Override
@@ -42,6 +47,19 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             super(itemView);
             host = (TextView) itemView.findViewById(R.id.host);
             title = (TextView) itemView.findViewById(R.id.titled);
+        }
+
+        public void setClickable(final String eventID, final Context context) {
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, EventDetailsActivity.class);
+                    Bundle b = new Bundle();
+                    b.putString(EventDetailsActivity.ARGUMENT_EVENT_ID, eventID);
+                    intent.putExtras(b);
+                    context.startActivity(intent);
+                }
+            });
         }
     }
 }

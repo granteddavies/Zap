@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 public class EventData {
     public final static String STATUS_YES = "YES";
-    public final static String STATUS_NO = "NO";
+    public final static String STATUS_CANT = "CANT";
     public final static String STATUS_MAYBE = "MAYBE";
     public final static String STATUS_PENDING = "PENDING";
 
