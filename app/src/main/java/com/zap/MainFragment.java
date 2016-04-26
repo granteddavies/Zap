@@ -18,7 +18,6 @@ import com.microsoft.windowsazure.mobileservices.table.TableOperationCallback;
 public class MainFragment extends Fragment {
 
     private ToggleButton toggleAvailable;
-    private EditText editActivity;
 
     public MainFragment() {
         // Required empty public constructor
@@ -52,13 +51,6 @@ public class MainFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 toggleAvailable(isChecked);
-            }
-        });
-        editActivity = (EditText) rootView.findViewById(R.id.editActivity);
-        editActivity.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                return false;
             }
         });
 

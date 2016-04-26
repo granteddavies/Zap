@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.zap.CreateEventActivity"
+    tools:showIn="@layout/activity_create_event">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/heading"
+        android:textSize="40dp"
+        android:textStyle="bold"
+        android:id="@+id/newEventText"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/new_title"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:id="@+id/newTitleText"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/newTitleEdit"
+        android:layout_alignBottom="@+id/newTitleEdit" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/newTitleEdit"
+        android:layout_below="@+id/newEventText"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/newTitleText" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/new_description"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:id="@+id/newDescriptionText"
+        android:layout_below="@+id/newTitleText"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/newDescriptionEdit"
+        android:layout_below="@+id/newDescriptionText"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/new_start_time"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:id="@+id/newStartTimeText"
+        android:layout_below="@+id/newDescriptionEdit"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/newStartTimeEdit"
+        android:layout_alignBottom="@+id/newStartTimeText"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/newStartTimeText" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/new_end_time"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:id="@+id/newEndTimeText"
+        android:layout_below="@+id/newStartTimeText"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/newEndTimeEdit"
+        android:layout_alignBottom="@+id/newEndTimeText"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/newEndTimeText" />
+
+
+    <include layout="@layout/friend_invite_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/inviteList"
+        android:layout_below="@+id/newEndTimeText"
+        android:layout_above="@+id/submitButton"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/new_submit"
+        android:textSize="40dp"
+        android:id="@+id/submitButton"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"/>
+
+
+</RelativeLayout>

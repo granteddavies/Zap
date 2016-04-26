@@ -62,23 +62,12 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: Remove test logic
-                //runTest();
-                //
+                Intent intent = new Intent(MainActivity.this, CreateEventActivity.class);
+                startActivity(intent);
             }
         });
 
     }
-
-    // TODO: Remove test logic
-    private void runTest() {
-        Calendar cal = Calendar.getInstance();
-        Event event = new Event(Profile.user.getId(), Profile.user.getName(), "Test Title", "Test Description", cal.getTime(), cal.getTime());
-        EventData eventData = new EventData(event);
-        eventData.addInvite(new Invite(null, Profile.user.getId(), Profile.user.getName()));
-        eventData.submit(this);
-    }
-    //
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

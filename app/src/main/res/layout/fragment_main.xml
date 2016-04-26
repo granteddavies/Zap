@@ -17,12 +17,4 @@
         android:id="@+id/toggleAvailable"
         android:layout_centerHorizontal="true" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/editActivity"
-        android:layout_below="@+id/toggleAvailable"
-        android:layout_centerHorizontal="true"
-        android:hint="@string/activity"/>
-
 </RelativeLayout>
