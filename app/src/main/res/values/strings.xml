@@ -29,4 +29,6 @@
     <string name="new_start_time">Start Time:</string>
     <string name="new_end_time">End Time:</string>
     <string name="new_submit">Submit</string>
+    <string name="no_title">You must enter a title</string>
+
 </resources>
