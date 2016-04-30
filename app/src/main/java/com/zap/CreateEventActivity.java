@@ -224,6 +224,7 @@ public class CreateEventActivity extends AppCompatActivity {
                 HttpMethod.GET,
                 new GraphRequest.Callback() {
                     public void onCompleted(GraphResponse response) {
+                        ArrayList<User> tmpFriends = new ArrayList<>();
                         try {
                             JSONArray fbFriends = response.getJSONObject().getJSONArray("data");
 
@@ -233,15 +234,15 @@ public class CreateEventActivity extends AppCompatActivity {
                                     JSONObject fbFriend = fbFriends.getJSONObject(i);
                                     User friend = new User(fbFriend.getString("name"),
                                             fbFriend.getString("id"));
-                                    friends.add(friend);
+                                    tmpFriends.add(friend);
                                 }
                             }
 
                             // TODO: remove this test line
-                            friends.add(Profile.user);
+                            tmpFriends.add(Profile.user);
                             //
 
-                            initializeFriends();
+                            initializeFriends(tmpFriends);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -250,10 +251,11 @@ public class CreateEventActivity extends AppCompatActivity {
         ).executeAsync();
     }
 
-    private void initializeFriends() {
-        for (int i = 0; i < friends.size(); i++) {
+    private void initializeFriends(ArrayList<User> fbFriends) {
+        friends.clear();
+        for (int i = 0; i < fbFriends.size(); i++) {
             final int index = i;
-            final User friend = friends.get(index);
+            final User friend = fbFriends.get(index);
             new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
@@ -268,7 +270,9 @@ public class CreateEventActivity extends AppCompatActivity {
 
                                 @Override
                                 public void run() {
-                                    friends.set(index, result.get(0));
+                                    if (result.get(0).getAvailable()) {
+                                        friends.add(result.get(0));
+                                    }
                                     adapter.notifyDataSetChanged();
                                 }
                             });
@@ -280,7 +284,6 @@ public class CreateEventActivity extends AppCompatActivity {
                                 public void run() {
                                     friend.setAvailable(false);
                                     friend.setActivity(null);
-                                    adapter.notifyDataSetChanged();
                                 }
                             });
                         }

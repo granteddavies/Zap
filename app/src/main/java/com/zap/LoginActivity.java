@@ -44,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
 
+
         // Check if the user is already logged in
         if (AccessToken.getCurrentAccessToken() != null) {
             loadProfile();
