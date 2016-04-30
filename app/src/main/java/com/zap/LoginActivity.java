@@ -1,5 +1,6 @@
 package com.zap;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -52,6 +53,8 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = (LoginButton) findViewById(R.id.login_button);
         loginButton.setReadPermissions("user_friends");
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+
+            //Trying to add the spinner in onSuccess
             @Override
             public void onSuccess(LoginResult loginResult) {
                 loadProfile();
@@ -88,7 +91,25 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /*
+        The progress dialog has been added for the load profile step. Implemented functionally
+
+        Bug is we don't currently dismiss the progress bar, although it does disappear when you go to the main activity
+        When I tried to dismiss in this method after the async execute, the app would not load a profile. I could still
+        log in and out but it wouldn't go to the main activity.
+
+     */
     private void loadProfile() {
+
+
+        ProgressDialog progress = new ProgressDialog(LoginActivity.this);//parameter??
+        progress.setTitle("Loading");
+        progress.setMessage("Please wait while the server authenticates your login");
+        progress.show();
+
+        //progress.dismiss();
+
+
         new GraphRequest(
                 AccessToken.getCurrentAccessToken(),
                 "/me",
