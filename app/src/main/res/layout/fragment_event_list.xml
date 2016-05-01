@@ -10,4 +10,5 @@
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
     tools:context="com.zap.EventsFragment"
+    android:background="@color/myred"
     tools:listitem="@layout/fragment_event" />

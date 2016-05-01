@@ -70,7 +70,7 @@ public class MainFragment extends Fragment {
     private void updateUI(boolean isAvailable) {
         toggleAvailable.setChecked(isAvailable);
         if (isAvailable) {
-            toggleAvailable.setTextColor(Color.GREEN);
+            toggleAvailable.setTextColor(Color.YELLOW);
         }
         else {
             toggleAvailable.setTextColor(Color.RED);
