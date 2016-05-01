@@ -106,7 +106,7 @@ public class LoginActivity extends AppCompatActivity {
 
         ProgressDialog progress = new ProgressDialog(LoginActivity.this);//parameter??
         progress.setTitle("Loading");
-        progress.setMessage("Please wait while the server authenticates your login");
+        progress.setMessage("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in.");
         progress.show();
 
         //progress.dismiss();

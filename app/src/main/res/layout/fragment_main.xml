@@ -16,6 +16,7 @@
         android:textOn="@string/available"
         android:textOff="@string/unavailable"
         android:id="@+id/toggleAvailable"
+        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
