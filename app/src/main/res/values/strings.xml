@@ -5,6 +5,10 @@
     <!-- Menu strings -->
     <string name="logout">Log Out</string>
 
+    <!-- Loading Activity strings -->
+    <string name="loader_title">Loading</string>
+    <string name="loader_text">Logging in</string>
+
     <!-- Main Activity strings -->
     <string name="available">AVAILABLE</string>
     <string name="unavailable">UNAVAILABLE</string>

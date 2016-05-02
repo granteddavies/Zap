@@ -103,14 +103,11 @@ public class LoginActivity extends AppCompatActivity {
      */
     private void loadProfile() {
 
-
         ProgressDialog progress = new ProgressDialog(LoginActivity.this);//parameter??
-        progress.setTitle("Loading");
-        progress.setMessage("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in.");
+        progress.setTitle(getString(R.string.loader_title));
+        progress.setMessage(getString(R.string.loader_text));
+        progress.setCancelable(false);
         progress.show();
-
-        //progress.dismiss();
-
 
         new GraphRequest(
                 AccessToken.getCurrentAccessToken(),
