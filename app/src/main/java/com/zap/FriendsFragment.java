@@ -34,6 +34,8 @@ public class FriendsFragment extends Fragment {
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
+     *
+     * TODO: sort the friends by availability: available at the top
      */
     public FriendsFragment() {
     }

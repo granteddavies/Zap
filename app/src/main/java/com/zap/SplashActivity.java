@@ -1,6 +1,7 @@
 package com.zap;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import com.microsoft.windowsazure.mobileservices.*;
@@ -13,10 +14,14 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        final MediaPlayer mp = MediaPlayer.create(this, R.raw.zap_sound_long);
+
         Thread timerThread = new Thread(){
             public void run(){
                 try{
+                    mp.start();
                     sleep(3000);
+                    mp.stop();
                 }catch(InterruptedException e){
                     e.printStackTrace();
                 }finally{
