@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 import com.microsoft.windowsazure.mobileservices.http.ServiceFilterResponse;
@@ -17,7 +18,8 @@ import com.microsoft.windowsazure.mobileservices.table.TableOperationCallback;
 
 public class MainFragment extends Fragment {
 
-    private ToggleButton toggleAvailable;
+    private TextView availabilityText;
+    private Switch availabilitySwitch;
 
     public MainFragment() {
         // Required empty public constructor
@@ -44,10 +46,10 @@ public class MainFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        availabilitySwitch = (Switch) rootView.findViewById(R.id.availabilitySwitch);
+        availabilityText = (TextView) rootView.findViewById(R.id.availabilityText);
 
-        // Initialization logic for widgets
-        toggleAvailable = (ToggleButton) rootView.findViewById(R.id.toggleAvailable);
-        toggleAvailable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        availabilitySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 toggleAvailable(isChecked);
@@ -68,12 +70,12 @@ public class MainFragment extends Fragment {
     }
 
     private void updateUI(boolean isAvailable) {
-        toggleAvailable.setChecked(isAvailable);
+        availabilitySwitch.setChecked(isAvailable);
         if (isAvailable) {
-            toggleAvailable.setTextColor(Color.YELLOW);
+            availabilityText.setText(getString(R.string.available));
         }
         else {
-            toggleAvailable.setTextColor(Color.RED);
+            availabilityText.setText(getString(R.string.unavailable));
         }
     }
 

@@ -6,4 +6,5 @@
     <color name="myred">#ED1C24</color>
     <color name="myyellow">#FFFF00</color>
     <color name="myblack">#000000</color>
+    <color name="window">#EEEEEE</color>
 </resources>

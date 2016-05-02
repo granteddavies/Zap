@@ -6,8 +6,8 @@
     <string name="logout">Log Out</string>
 
     <!-- Main Activity strings -->
-    <string name="available">Available</string>
-    <string name="unavailable">Unavailable</string>
+    <string name="available">AVAILABLE</string>
+    <string name="unavailable">UNAVAILABLE</string>
     <string name="activity">(Optional) I want to:</string>
     <string name="title_activity_main2">Zap</string>
     <string name="action_settings">Settings</string>
