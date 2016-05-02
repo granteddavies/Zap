@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.microsoft.windowsazure.mobileservices.MobileServiceList;
 
@@ -22,6 +23,7 @@ public class EventsFragment extends Fragment {
     private ArrayList<Invite> invites = new ArrayList<>();
     private ArrayList<Event> events = new ArrayList<>();
     private EventAdapter adapter;
+    private ProgressBar progressBar;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -48,11 +50,14 @@ public class EventsFragment extends Fragment {
         Context context = view.getContext();
         adapter = new EventAdapter(events, context);
 
-        if (view instanceof RecyclerView) {
-            RecyclerView recyclerView = (RecyclerView) view;
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            recyclerView.setAdapter(adapter);
-        }
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.eventList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setAdapter(adapter);
+
+        events.clear();
+        adapter.notifyDataSetChanged();
+
+        progressBar = (ProgressBar) view.findViewById(R.id.eventProgress);
 
         loadEvents();
 
@@ -108,6 +113,7 @@ public class EventsFragment extends Fragment {
 
                         @Override
                         public void run() {
+                            progressBar.setVisibility(View.GONE);
                             adapter.notifyDataSetChanged();
                         }
                     });
