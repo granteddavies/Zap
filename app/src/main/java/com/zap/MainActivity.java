@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -51,10 +52,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        //title bar black
-
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
@@ -76,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabBar);
+        tabLayout.setupWithViewPager(mViewPager);
     }
 
     @Override
@@ -129,6 +128,22 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             return 3;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    // Friends
+                    return getString(R.string.tab_friends);
+                case 1:
+                    // Main
+                    return getString(R.string.tab_home);
+                case 2:
+                    // Events
+                    return getString(R.string.tab_events);
+            }
+            return null;
         }
     }
 }

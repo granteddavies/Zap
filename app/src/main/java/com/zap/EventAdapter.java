@@ -50,7 +50,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         }
 
         public void setClickable(final String eventID, final Context context) {
-            itemView.setOnClickListener(new View.OnClickListener() {
+            itemView.findViewById(R.id.eventCard).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, EventDetailsActivity.class);
