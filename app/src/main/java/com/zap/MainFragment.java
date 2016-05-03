@@ -65,11 +65,13 @@ public class MainFragment extends Fragment {
      * Toggle the user's availability
      */
     private void toggleAvailable(boolean isAvailable) {
+        availabilitySwitch.setClickable(false);
         Profile.user.setAvailable(isAvailable);
         updateUser();
     }
 
     private void updateUI(boolean isAvailable) {
+        availabilitySwitch.setClickable(true);
         availabilitySwitch.setChecked(isAvailable);
         if (isAvailable) {
             availabilityText.setText(getString(R.string.available));
