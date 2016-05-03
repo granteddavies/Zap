@@ -4,6 +4,7 @@
 
     <!-- Menu strings -->
     <string name="logout">Log Out</string>
+    <string name="delete">Delete Event</string>
 
     <!-- Loading Activity strings -->
     <string name="loader_title">Loading</string>
@@ -28,6 +29,8 @@
     <string name="start_time">At </string>
     <string name="end_time">Expires at </string>
     <string name="title_activity_event_details">Event Details</string>
+    <string name="event_details_loader_title">Deleting</string>
+    <string name="event_details_loader_text">Deleting event, please wait</string>
 
     <!-- Create Event Activity strings -->
     <string name="heading">New Event</string>
