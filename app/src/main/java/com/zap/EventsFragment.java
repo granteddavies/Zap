@@ -11,8 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.microsoft.windowsazure.mobileservices.MobileServiceList;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,6 +29,8 @@ public class EventsFragment extends Fragment {
     private ArrayList<EventData> events = new ArrayList<>();
     private EventAdapter adapter;
     private ProgressBar progressBar;
+    private RecyclerView recyclerView;
+    private TextView emptyText;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -52,9 +57,11 @@ public class EventsFragment extends Fragment {
         Context context = view.getContext();
         adapter = new EventAdapter(events, context);
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.eventList);
+        recyclerView = (RecyclerView) view.findViewById(R.id.eventList);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(adapter);
+
+        emptyText = (TextView) view.findViewById(R.id.emptyEvents);
 
         events.clear();
         adapter.notifyDataSetChanged();
@@ -118,6 +125,12 @@ public class EventsFragment extends Fragment {
                         @Override
                         public void run() {
                             progressBar.setVisibility(View.GONE);
+
+                            if (events.isEmpty()) {
+                                recyclerView.setVisibility(View.GONE);
+                                emptyText.setVisibility(View.VISIBLE);
+                            }
+
                             Collections.sort(events, new EventComparator());
                             adapter.notifyDataSetChanged();
                         }

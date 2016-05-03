@@ -7,6 +7,15 @@
     android:fitsSystemWindows="true"
     tools:context="com.zap.EventsFragment">
 
+    <TextView
+        android:id="@+id/emptyEvents"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone"
+        android:text="@string/no_events"
+        android:textColor="#7F7F7F"/>
+
     <ProgressBar
         android:id="@+id/eventProgress"
         android:layout_width="wrap_content"
