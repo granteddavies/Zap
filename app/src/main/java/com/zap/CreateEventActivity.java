@@ -155,7 +155,7 @@ public class CreateEventActivity extends AppCompatActivity {
         buttonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (editTitle.getText() == null || editTitle.getText().equals("")) {
+                if (editTitle.getText().toString() == null || editTitle.getText().toString().trim().length() == 0) {
                     Snackbar.make(findViewById(android.R.id.content), R.string.no_title, Snackbar.LENGTH_LONG)
                             .show();
                 }
