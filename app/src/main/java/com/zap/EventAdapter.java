@@ -2,6 +2,7 @@ package com.zap;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,10 +13,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
-    private ArrayList<Event> eventList;
+    private ArrayList<EventData> eventList;
     private Context context;
 
-    public EventAdapter(ArrayList<Event> eventList, Context context) {
+    public EventAdapter(ArrayList<EventData> eventList, Context context) {
         this.eventList = eventList;
         this.context = context;
     }
@@ -29,9 +30,33 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 
     @Override
     public void onBindViewHolder(EventAdapter.EventViewHolder holder, int position) {
-        holder.host.setText(eventList.get(position).getHostname());
-        holder.title.setText(eventList.get(position).getTitle());
-        holder.setClickable(eventList.get(position).getId(), context);
+        holder.title.setText(eventList.get(position).getEvent().getTitle());
+
+        if (eventList.get(position).getEvent().getHostid().equals(Profile.user.getId())) {
+            holder.status.setText("HOST");
+            holder.status.setTextColor(Color.parseColor("#FF7F00"));
+        }
+        else {
+            String status = eventList.get(position).getInvites().get(0).getStatus();
+            holder.status.setText(status);
+
+            switch (status) {
+                case EventData.STATUS_PENDING:
+                    holder.status.setTextColor(Color.GRAY);
+                    break;
+                case EventData.STATUS_YES:
+                    holder.status.setTextColor(Color.GREEN);
+                    break;
+                case EventData.STATUS_MAYBE:
+                    holder.status.setTextColor(Color.YELLOW);
+                    break;
+                case EventData.STATUS_CANT:
+                    holder.status.setTextColor(Color.RED);
+                    break;
+            }
+        }
+
+        holder.setClickable(eventList.get(position).getEvent().getId(), context);
     }
 
     @Override
@@ -40,13 +65,13 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     }
 
     public static class EventViewHolder extends RecyclerView.ViewHolder {
-        protected TextView host;
         protected TextView title;
+        protected TextView status;
 
         public EventViewHolder(View itemView) {
             super(itemView);
-            host = (TextView) itemView.findViewById(R.id.host);
-            title = (TextView) itemView.findViewById(R.id.titled);
+            title = (TextView) itemView.findViewById(R.id.eventTitle);
+            status = (TextView) itemView.findViewById(R.id.eventStatus);
         }
 
         public void setClickable(final String eventID, final Context context) {

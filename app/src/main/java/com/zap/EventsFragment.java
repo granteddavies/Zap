@@ -21,7 +21,7 @@ import java.util.ArrayList;
  */
 public class EventsFragment extends Fragment {
     private ArrayList<Invite> invites = new ArrayList<>();
-    private ArrayList<Event> events = new ArrayList<>();
+    private ArrayList<EventData> events = new ArrayList<>();
     private EventAdapter adapter;
     private ProgressBar progressBar;
 
@@ -102,7 +102,9 @@ public class EventsFragment extends Fragment {
                                         .execute().get();
 
                         if (result.size() == 1) {
-                            events.add(result.get(0));
+                            EventData eventData = new EventData(result.get(0));
+                            eventData.addInvite(invite);
+                            events.add(eventData);
                         }
                         else {
                             throw new RuntimeException("Unexpected number of matches for event");
