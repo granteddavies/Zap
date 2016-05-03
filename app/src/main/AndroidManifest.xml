@@ -52,7 +52,7 @@ g    <application
             android:name=".CreateEventActivity"
             android:label="@string/title_activity_create_event"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/CreateEventTheme"
             android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait" >
             <meta-data
