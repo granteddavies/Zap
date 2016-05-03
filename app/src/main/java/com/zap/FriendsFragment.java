@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ProgressBar;
 
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
@@ -30,6 +31,8 @@ public class FriendsFragment extends Fragment {
 
     private ArrayList<User> friends = new ArrayList<>();
     private FriendsAdapter adapter;
+    private ProgressBar progressBar;
+    private int numTasks, numCompleteTasks;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -58,11 +61,14 @@ public class FriendsFragment extends Fragment {
         Context context = view.getContext();
         adapter = new FriendsAdapter(friends, context);
 
-        if (view instanceof RecyclerView) {
-            RecyclerView recyclerView = (RecyclerView) view;
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            recyclerView.setAdapter(adapter);
-        }
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.friendList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setAdapter(adapter);
+
+        friends.clear();
+        adapter.notifyDataSetChanged();
+
+        progressBar = (ProgressBar) view.findViewById(R.id.friendProgress);
 
         loadFriends();
 
@@ -104,6 +110,8 @@ public class FriendsFragment extends Fragment {
     }
 
     private void initializeFriends() {
+        numCompleteTasks = 0;
+        numTasks = friends.size();
         for (int i = 0; i < friends.size(); i++) {
             final int index = i;
             final User friend = friends.get(index);
@@ -121,8 +129,11 @@ public class FriendsFragment extends Fragment {
 
                                 @Override
                                 public void run() {
-                                    friends.set(friends.indexOf(friend), result.get(0));
-                                    updateAdapter();
+                                    int pos = friends.indexOf(friend);
+                                    if (pos != -1) {
+                                        friends.set(friends.indexOf(friend), result.get(0));
+                                        updateAdapter();
+                                    }
                                 }
                             });
                         }
@@ -155,8 +166,11 @@ public class FriendsFragment extends Fragment {
 
             @Override
             public void run() {
-                Collections.sort(friends, new UserComparator());
-                adapter.notifyDataSetChanged();
+                if (++numCompleteTasks == numTasks) {
+                    Collections.sort(friends, new UserComparator());
+                    progressBar.setVisibility(View.GONE);
+                    adapter.notifyDataSetChanged();
+                }
             }
         });
     }

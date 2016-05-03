@@ -8,14 +8,23 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity$PlaceholderFragment">
 
-    <ToggleButton
+    <Switch
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="45dp"
-        android:textOn="@string/available"
-        android:textOff="@string/unavailable"
-        android:id="@+id/toggleAvailable"
+        android:switchMinWidth="250dp"
+        android:id="@+id/availabilitySwitch"
         android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:theme="@style/SwitchTheme"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/availabilityText"
+        android:textSize="45sp"
+        android:textStyle="bold"
+        android:layout_above="@+id/availabilitySwitch"
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

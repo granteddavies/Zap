@@ -5,7 +5,24 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/myblack</item>
         <item name="colorPrimaryDark">@color/myblack</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/myyellow</item>
+        <item name="android:windowBackground">@color/window</item>
+    </style>
+
+    <style name="CreateEventTheme" parent="AppTheme.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/myblack</item>
+        <item name="colorPrimaryDark">@color/myblack</item>
+        <item name="colorAccent">@color/myblack</item>
+        <item name="android:windowBackground">@color/window</item>
+    </style>
+
+    <style name="SwitchTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/myblack</item>
+        <item name="colorPrimaryDark">@color/myblack</item>
+        <item name="colorAccent">#00DD00</item>
+        <item name="android:windowBackground">@color/window</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

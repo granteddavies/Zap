@@ -1,35 +1,41 @@
 package com.zap;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.facebook.login.LoginManager;
 import com.microsoft.windowsazure.mobileservices.MobileServiceList;
 
-import java.text.SimpleDateFormat;
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class EventDetailsActivity extends AppCompatActivity {
     public static final String ARGUMENT_EVENT_ID = "eventID";
 
-    private TextView hostText, titleText, startTimeText, endTimeText, descriptionText;
+    private TextView hostText, titleText, startTimeText, endTimeText, descriptionText, otherMembersText;
     private ToggleButton toggleYes, toggleMaybe, toggleCant;
     private EventData eventData;
     private ArrayList<Invite> invites = new ArrayList<>();
     private InviteAdapter adapter;
     private Invite userInvite;
+    private ProgressBar progressBar;
+    private int numTasks, numCompleteTasks;
+    private Menu menu;
+    private RecyclerView recyclerView;
 
     private boolean ignoreButtonChecks;
 
@@ -41,15 +47,23 @@ public class EventDetailsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        progressBar = (ProgressBar) findViewById(R.id.content_event).findViewById(R.id.eventDetailsProgress);
+
         hostText = (TextView) findViewById(R.id.content_event).findViewById(R.id.hostText);
         titleText = (TextView) findViewById(R.id.content_event).findViewById(R.id.titleText);
         startTimeText = (TextView) findViewById(R.id.content_event).findViewById(R.id.startTimeText);
         endTimeText = (TextView) findViewById(R.id.content_event).findViewById(R.id.endTimeText);
         descriptionText = (TextView) findViewById(R.id.content_event).findViewById(R.id.descriptionText);
+        otherMembersText = (TextView) findViewById(R.id.content_event).findViewById(R.id.otherMembersText);
 
         toggleYes = (ToggleButton) findViewById(R.id.content_event).findViewById(R.id.toggleYes);
         toggleMaybe = (ToggleButton) findViewById(R.id.content_event).findViewById(R.id.toggleMaybe);
         toggleCant = (ToggleButton) findViewById(R.id.content_event).findViewById(R.id.toggleCant);
+
+        otherMembersText.setVisibility(View.GONE);
+        toggleYes.setVisibility(View.GONE);
+        toggleMaybe.setVisibility(View.GONE);
+        toggleCant.setVisibility(View.GONE);
 
         ignoreButtonChecks = false;
 
@@ -103,7 +117,7 @@ public class EventDetailsActivity extends AppCompatActivity {
 
         adapter = new InviteAdapter(invites, this);
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.otherMembersList);
+        recyclerView = (RecyclerView) findViewById(R.id.otherMembersList);
         recyclerView.setAdapter(adapter);
 
         loadEventData(getIntent().getExtras().getString(ARGUMENT_EVENT_ID));
@@ -153,7 +167,9 @@ public class EventDetailsActivity extends AppCompatActivity {
                             userInvite = invite;
                         }
                         else {
-                            invites.add(invite);
+                            if (!invite.getRecipientid().equals(eventData.getEvent().getHostid())) {
+                                invites.add(invite);
+                            }
                         }
                     }
 
@@ -175,15 +191,50 @@ public class EventDetailsActivity extends AppCompatActivity {
                 hostText.setText(eventData.getEvent().getHostname());
                 titleText.setText(eventData.getEvent().getTitle());
 
-                SimpleDateFormat sdf = new SimpleDateFormat("h:mm a");
-                startTimeText.setText(R.string.start_time + sdf.format(eventData.getEvent().getStarttime()));
-                endTimeText.setText(R.string.end_time + sdf.format(eventData.getEvent().getEndtime()));
+                DateFormat df = DateFormat.getTimeInstance(DateFormat.SHORT);
+
+                Date startTime, endTime;
+                startTime = eventData.getEvent().getStarttime();
+                endTime = eventData.getEvent().getEndtime();
+
+                if (startTime == null) {
+                    startTimeText.setVisibility(View.GONE);
+                }
+                else {
+                    startTimeText.setText("At " + df.format(startTime));
+                }
+
+                if (endTime == null) {
+                    endTimeText.setVisibility(View.GONE);
+                }
+                else {
+                    endTimeText.setText("Expires at " + df.format(endTime));
+                }
 
                 descriptionText.setText(eventData.getEvent().getDescription());
 
+                progressBar.setVisibility(View.GONE);
+
+                otherMembersText.setVisibility(View.VISIBLE);
+                toggleYes.setVisibility(View.VISIBLE);
+                toggleMaybe.setVisibility(View.VISIBLE);
+                toggleCant.setVisibility(View.VISIBLE);
+
+                if (invites.isEmpty()) {
+                    otherMembersText.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.GONE);
+                }
+
+                inflateDeleteOption();
                 updateButtonUI(userInvite.getStatus());
             }
         });
+    }
+
+    private void inflateDeleteOption() {
+        if (Profile.user.getId().equals(eventData.getEvent().getHostid())) {
+            getMenuInflater().inflate(R.menu.menu_delete, menu);
+        }
     }
 
     private void updateStatus(final String status) {
@@ -210,6 +261,12 @@ public class EventDetailsActivity extends AppCompatActivity {
 
     private void updateButtonUI(String status) {
         ignoreButtonChecks = true;
+
+        if (Profile.user.getId().equals(eventData.getEvent().getHostid())) {
+            toggleYes.setVisibility(View.GONE);
+            toggleMaybe.setVisibility(View.GONE);
+            toggleCant.setVisibility(View.GONE);
+        }
 
         switch(status) {
             case EventData.STATUS_YES:
@@ -264,8 +321,85 @@ public class EventDetailsActivity extends AppCompatActivity {
         ignoreButtonChecks = false;
     }
 
+    private void deleteEvent() {
+        ProgressDialog progress = new ProgressDialog(EventDetailsActivity.this);
+        progress.setTitle(getString(R.string.event_details_loader_title));
+        progress.setMessage(getString(R.string.event_details_loader_text));
+        progress.setCancelable(false);
+        progress.show();
+
+        numCompleteTasks = 0;
+        numTasks = invites.size() + 2;
+
+        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    Profile.mClient.getTable(Event.class).delete(eventData.getEvent());
+
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            cleanup();
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        }.execute();
+
+        for (final Invite invite : invites) {
+            new AsyncTask<Void, Void, Void>() {
+
+                @Override
+                protected Void doInBackground(Void... params) {
+                    try {
+                        Profile.mClient.getTable(Invite.class).delete(invite);
+
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                cleanup();
+                            }
+                        });
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
+            }.execute();
+        }
+
+        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    Profile.mClient.getTable(Invite.class).delete(userInvite);
+
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            cleanup();
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        }.execute();
+    }
+
+    private void cleanup() {
+        if (++numCompleteTasks == numTasks) {
+            finish();
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
@@ -278,6 +412,10 @@ public class EventDetailsActivity extends AppCompatActivity {
                 Intent intent = new Intent(EventDetailsActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
+                return true;
+
+            case R.id.delete:
+                deleteEvent();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -19,6 +19,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TimePicker;
 
 import com.facebook.AccessToken;
@@ -45,6 +46,7 @@ public class CreateEventActivity extends AppCompatActivity {
     private Button buttonSubmit;
     private Date startTime, endTime;
     private RecyclerView inviteList;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,7 +155,7 @@ public class CreateEventActivity extends AppCompatActivity {
         buttonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (editTitle.getText() == null || editTitle.getText().equals("")) {
+                if (editTitle.getText().toString() == null || editTitle.getText().toString().trim().length() == 0) {
                     Snackbar.make(findViewById(android.R.id.content), R.string.no_title, Snackbar.LENGTH_LONG)
                             .show();
                 }
@@ -165,8 +167,10 @@ public class CreateEventActivity extends AppCompatActivity {
 
         adapter = new FriendInviteAdapter(friends, this);
 
-        inviteList = (RecyclerView) findViewById(R.id.inviteList);
+        inviteList = (RecyclerView) findViewById(R.id.inviteList).findViewById(R.id.friendInviteList);
         inviteList.setAdapter(adapter);
+
+        progressBar = (ProgressBar) findViewById(R.id.inviteList).findViewById(R.id.createProgress);
 
         loadFriends();
     }
@@ -213,6 +217,20 @@ public class CreateEventActivity extends AppCompatActivity {
                 }.execute();
             }
         }
+
+        final Invite invite = new Invite(event.getId(), Profile.user.getId(), Profile.user.getName());
+        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    Profile.mClient.getTable(Invite.class).insert(invite).get();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        }.execute();
         finish();
     }
 
@@ -237,10 +255,6 @@ public class CreateEventActivity extends AppCompatActivity {
                                     tmpFriends.add(friend);
                                 }
                             }
-
-                            // TODO: remove this test line
-                            tmpFriends.add(Profile.user);
-                            //
 
                             initializeFriends(tmpFriends);
                         } catch (JSONException e) {
@@ -273,6 +287,7 @@ public class CreateEventActivity extends AppCompatActivity {
                                     if (result.get(0).getAvailable()) {
                                         friends.add(result.get(0));
                                     }
+                                    progressBar.setVisibility(View.GONE);
                                     adapter.notifyDataSetChanged();
                                 }
                             });

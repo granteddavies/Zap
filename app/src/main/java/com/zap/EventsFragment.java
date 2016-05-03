@@ -10,18 +10,22 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.microsoft.windowsazure.mobileservices.MobileServiceList;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Created by Grant on 4/24/2016.
  */
 public class EventsFragment extends Fragment {
     private ArrayList<Invite> invites = new ArrayList<>();
-    private ArrayList<Event> events = new ArrayList<>();
+    private ArrayList<EventData> events = new ArrayList<>();
     private EventAdapter adapter;
+    private ProgressBar progressBar;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -48,11 +52,14 @@ public class EventsFragment extends Fragment {
         Context context = view.getContext();
         adapter = new EventAdapter(events, context);
 
-        if (view instanceof RecyclerView) {
-            RecyclerView recyclerView = (RecyclerView) view;
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            recyclerView.setAdapter(adapter);
-        }
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.eventList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setAdapter(adapter);
+
+        events.clear();
+        adapter.notifyDataSetChanged();
+
+        progressBar = (ProgressBar) view.findViewById(R.id.eventProgress);
 
         loadEvents();
 
@@ -97,7 +104,9 @@ public class EventsFragment extends Fragment {
                                         .execute().get();
 
                         if (result.size() == 1) {
-                            events.add(result.get(0));
+                            EventData eventData = new EventData(result.get(0));
+                            eventData.addInvite(invite);
+                            events.add(eventData);
                         }
                         else {
                             throw new RuntimeException("Unexpected number of matches for event");
@@ -108,6 +117,8 @@ public class EventsFragment extends Fragment {
 
                         @Override
                         public void run() {
+                            progressBar.setVisibility(View.GONE);
+                            Collections.sort(events, new EventComparator());
                             adapter.notifyDataSetChanged();
                         }
                     });
@@ -118,5 +129,60 @@ public class EventsFragment extends Fragment {
                 return null;
             }
         }.execute();
+    }
+
+    private class EventComparator implements Comparator<EventData> {
+        @Override
+        public int compare(EventData ed1, EventData ed2) {
+            if (ed1.getEvent().getHostid().equals(Profile.user.getId()) && !ed2.getEvent().getHostid().equals(Profile.user.getId())) {
+                return -1;
+            }
+            if (!ed1.getEvent().getHostid().equals(Profile.user.getId()) && ed2.getEvent().getHostid().equals(Profile.user.getId())) {
+                return 1;
+            }
+
+            String s1 = ed1.getInvites().get(0).getStatus();
+            String s2 = ed2.getInvites().get(0).getStatus();
+
+            int p1 = 0, p2 = 0;
+
+            switch (s1) {
+                case EventData.STATUS_PENDING:
+                    p1 = 0;
+                    break;
+                case EventData.STATUS_YES:
+                    p1 = 1;
+                    break;
+                case EventData.STATUS_MAYBE:
+                    p1 = 2;
+                    break;
+                case EventData.STATUS_CANT:
+                    p1 = 3;
+                    break;
+            }
+            switch (s2) {
+                case EventData.STATUS_PENDING:
+                    p2 = 0;
+                    break;
+                case EventData.STATUS_YES:
+                    p2 = 1;
+                    break;
+                case EventData.STATUS_MAYBE:
+                    p2 = 2;
+                    break;
+                case EventData.STATUS_CANT:
+                    p2 = 3;
+                    break;
+            }
+
+            if (p1 < p2) {
+                return -1;
+            }
+            if (p1 > p2) {
+                return 1;
+            }
+
+            return ed1.getEvent().getTitle().compareTo(ed2.getEvent().getTitle());
+        }
     }
 }
