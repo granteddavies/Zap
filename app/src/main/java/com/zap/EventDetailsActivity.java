@@ -12,24 +12,27 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.facebook.login.LoginManager;
 import com.microsoft.windowsazure.mobileservices.MobileServiceList;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class EventDetailsActivity extends AppCompatActivity {
     public static final String ARGUMENT_EVENT_ID = "eventID";
 
-    private TextView hostText, titleText, startTimeText, endTimeText, descriptionText;
+    private TextView hostText, titleText, startTimeText, endTimeText, descriptionText, otherMembersText;
     private ToggleButton toggleYes, toggleMaybe, toggleCant;
     private EventData eventData;
     private ArrayList<Invite> invites = new ArrayList<>();
     private InviteAdapter adapter;
     private Invite userInvite;
+    private ProgressBar progressBar;
 
     private boolean ignoreButtonChecks;
 
@@ -41,15 +44,23 @@ public class EventDetailsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        progressBar = (ProgressBar) findViewById(R.id.content_event).findViewById(R.id.eventDetailsProgress);
+
         hostText = (TextView) findViewById(R.id.content_event).findViewById(R.id.hostText);
         titleText = (TextView) findViewById(R.id.content_event).findViewById(R.id.titleText);
         startTimeText = (TextView) findViewById(R.id.content_event).findViewById(R.id.startTimeText);
         endTimeText = (TextView) findViewById(R.id.content_event).findViewById(R.id.endTimeText);
         descriptionText = (TextView) findViewById(R.id.content_event).findViewById(R.id.descriptionText);
+        otherMembersText = (TextView) findViewById(R.id.content_event).findViewById(R.id.otherMembersText);
 
         toggleYes = (ToggleButton) findViewById(R.id.content_event).findViewById(R.id.toggleYes);
         toggleMaybe = (ToggleButton) findViewById(R.id.content_event).findViewById(R.id.toggleMaybe);
         toggleCant = (ToggleButton) findViewById(R.id.content_event).findViewById(R.id.toggleCant);
+
+        otherMembersText.setVisibility(View.GONE);
+        toggleYes.setVisibility(View.GONE);
+        toggleMaybe.setVisibility(View.GONE);
+        toggleCant.setVisibility(View.GONE);
 
         ignoreButtonChecks = false;
 
@@ -175,11 +186,18 @@ public class EventDetailsActivity extends AppCompatActivity {
                 hostText.setText(eventData.getEvent().getHostname());
                 titleText.setText(eventData.getEvent().getTitle());
 
-                SimpleDateFormat sdf = new SimpleDateFormat("h:mm a");
-                startTimeText.setText(R.string.start_time + sdf.format(eventData.getEvent().getStarttime()));
-                endTimeText.setText(R.string.end_time + sdf.format(eventData.getEvent().getEndtime()));
+                DateFormat df = DateFormat.getTimeInstance(DateFormat.SHORT);
+                startTimeText.setText("At " + df.format(eventData.getEvent().getStarttime()));
+                endTimeText.setText("Expires at " + df.format(eventData.getEvent().getEndtime()));
 
                 descriptionText.setText(eventData.getEvent().getDescription());
+
+                progressBar.setVisibility(View.GONE);
+
+                otherMembersText.setVisibility(View.VISIBLE);
+                toggleYes.setVisibility(View.VISIBLE);
+                toggleMaybe.setVisibility(View.VISIBLE);
+                toggleCant.setVisibility(View.VISIBLE);
 
                 updateButtonUI(userInvite.getStatus());
             }

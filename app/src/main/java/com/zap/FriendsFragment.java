@@ -127,8 +127,11 @@ public class FriendsFragment extends Fragment {
 
                                 @Override
                                 public void run() {
-                                    friends.set(friends.indexOf(friend), result.get(0));
-                                    updateAdapter();
+                                    int pos = friends.indexOf(friend);
+                                    if (pos != -1) {
+                                        friends.set(friends.indexOf(friend), result.get(0));
+                                        updateAdapter();
+                                    }
                                 }
                             });
                         }

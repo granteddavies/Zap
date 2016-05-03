@@ -12,11 +12,18 @@
     tools:context="com.zap.EventDetailsActivity"
     tools:showIn="@layout/activity_event_details">
 
+    <ProgressBar
+        android:id="@+id/eventDetailsProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:layout_centerInParent="true"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Alexander Hammond"
+        android:text=""
         android:textSize="30dp"
         android:textStyle="bold"
         android:id="@+id/hostText"
@@ -27,7 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Hang Out"
+        android:text=""
         android:textSize="27dp"
         android:id="@+id/titleText"
         android:layout_below="@+id/hostText"
@@ -38,7 +45,7 @@
         android:layout_height="wrap_content"
         android:paddingTop="10dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Starts at 4:00PM"
+        android:text=""
         android:textSize="20dp"
         android:id="@+id/startTimeText"
         android:layout_below="@+id/titleText"
@@ -49,7 +56,7 @@
         android:layout_height="wrap_content"
         android:paddingBottom="10dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Expires at 8:00PM"
+        android:text=""
         android:textSize="20dp"
         android:id="@+id/endTimeText"
         android:layout_below="@+id/startTimeText"
@@ -59,7 +66,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ultrices ligula lorem, a ultricies velit sagittis consequat."
+        android:text=""
         android:textSize="17dp"
         android:id="@+id/descriptionText"
         android:layout_below="@+id/endTimeText"
