@@ -21,6 +21,7 @@ import com.microsoft.windowsazure.mobileservices.MobileServiceList;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class EventDetailsActivity extends AppCompatActivity {
     public static final String ARGUMENT_EVENT_ID = "eventID";
@@ -34,6 +35,7 @@ public class EventDetailsActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private int numTasks, numCompleteTasks;
     private Menu menu;
+    private RecyclerView recyclerView;
 
     private boolean ignoreButtonChecks;
 
@@ -115,7 +117,7 @@ public class EventDetailsActivity extends AppCompatActivity {
 
         adapter = new InviteAdapter(invites, this);
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.otherMembersList);
+        recyclerView = (RecyclerView) findViewById(R.id.otherMembersList);
         recyclerView.setAdapter(adapter);
 
         loadEventData(getIntent().getExtras().getString(ARGUMENT_EVENT_ID));
@@ -190,8 +192,24 @@ public class EventDetailsActivity extends AppCompatActivity {
                 titleText.setText(eventData.getEvent().getTitle());
 
                 DateFormat df = DateFormat.getTimeInstance(DateFormat.SHORT);
-                startTimeText.setText("At " + df.format(eventData.getEvent().getStarttime()));
-                endTimeText.setText("Expires at " + df.format(eventData.getEvent().getEndtime()));
+
+                Date startTime, endTime;
+                startTime = eventData.getEvent().getStarttime();
+                endTime = eventData.getEvent().getEndtime();
+
+                if (startTime == null) {
+                    startTimeText.setVisibility(View.GONE);
+                }
+                else {
+                    startTimeText.setText("At " + df.format(startTime));
+                }
+
+                if (endTime == null) {
+                    endTimeText.setVisibility(View.GONE);
+                }
+                else {
+                    endTimeText.setText("Expires at " + df.format(endTime));
+                }
 
                 descriptionText.setText(eventData.getEvent().getDescription());
 
@@ -201,6 +219,11 @@ public class EventDetailsActivity extends AppCompatActivity {
                 toggleYes.setVisibility(View.VISIBLE);
                 toggleMaybe.setVisibility(View.VISIBLE);
                 toggleCant.setVisibility(View.VISIBLE);
+
+                if (invites.isEmpty()) {
+                    otherMembersText.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.GONE);
+                }
 
                 inflateDeleteOption();
                 updateButtonUI(userInvite.getStatus());
@@ -238,6 +261,12 @@ public class EventDetailsActivity extends AppCompatActivity {
 
     private void updateButtonUI(String status) {
         ignoreButtonChecks = true;
+
+        if (Profile.user.getId().equals(eventData.getEvent().getHostid())) {
+            toggleYes.setVisibility(View.GONE);
+            toggleMaybe.setVisibility(View.GONE);
+            toggleCant.setVisibility(View.GONE);
+        }
 
         switch(status) {
             case EventData.STATUS_YES:
