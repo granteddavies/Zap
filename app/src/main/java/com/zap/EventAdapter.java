@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,10 +46,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
                     holder.status.setTextColor(Color.GRAY);
                     break;
                 case EventData.STATUS_YES:
-                    holder.status.setTextColor(Color.GREEN);
+                    holder.status.setTextColor(Color.parseColor("#00CC00"));
                     break;
                 case EventData.STATUS_MAYBE:
-                    holder.status.setTextColor(Color.YELLOW);
+                    holder.status.setTextColor(Color.parseColor("#CCCC00"));
                     break;
                 case EventData.STATUS_CANT:
                     holder.status.setTextColor(Color.RED);
@@ -67,11 +68,13 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     public static class EventViewHolder extends RecyclerView.ViewHolder {
         protected TextView title;
         protected TextView status;
+        protected CardView card;
 
         public EventViewHolder(View itemView) {
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.eventTitle);
             status = (TextView) itemView.findViewById(R.id.eventStatus);
+            card = (CardView) itemView.findViewById(R.id.eventCard);
         }
 
         public void setClickable(final String eventID, final Context context) {
