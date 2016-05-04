@@ -54,6 +54,13 @@ public class CreateEventActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
+
+        if (Profile.user == null || AccessToken.getCurrentAccessToken() == null) {
+            Intent intent = new Intent(CreateEventActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
 import com.microsoft.windowsazure.mobileservices.MobileServiceList;
 
@@ -43,6 +44,13 @@ public class EventDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_details);
+
+        if (Profile.user == null || AccessToken.getCurrentAccessToken() == null) {
+            Intent intent = new Intent(EventDetailsActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
