@@ -43,5 +43,7 @@
     <string name="new_submit">Submit</string>
     <string name="no_title">You must enter a title</string>
     <string name="title_activity_create_event">New Event</string>
+    <string name="create_event_loader_title">Creating</string>
+    <string name="create_event_loader_text">Creating event, please wait</string>
 
 </resources>

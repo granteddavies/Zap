@@ -1,6 +1,7 @@
 package com.zap;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -47,6 +48,7 @@ public class CreateEventActivity extends AppCompatActivity {
     private Date startTime, endTime;
     private RecyclerView inviteList;
     private ProgressBar progressBar;
+    private int numTasks, numCompleteTasks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -181,6 +183,12 @@ public class CreateEventActivity extends AppCompatActivity {
     }
 
     private void submitEvent() {
+        ProgressDialog progress = new ProgressDialog(CreateEventActivity.this);
+        progress.setTitle(getString(R.string.create_event_loader_title));
+        progress.setMessage(getString(R.string.create_event_loader_text));
+        progress.setCancelable(false);
+        progress.show();
+
         final Event event = new Event(Profile.user.getId(), Profile.user.getName(), editTitle.getText().toString(),
                         editDescription.getText().toString(), startTime, endTime);
         new AsyncTask<Void, Void, Void>() {
@@ -199,9 +207,13 @@ public class CreateEventActivity extends AppCompatActivity {
     }
 
     private void submitInvites(Event event) {
+        numCompleteTasks = 0;
+        numTasks = 1;
+
         for (int i = 0; i < friends.size(); i++) {
             CheckBox chk = (CheckBox) inviteList.getChildAt(i).findViewById(R.id.friendCheck);
             if (chk.isChecked()) {
+                numTasks++;
                 final Invite invite = new Invite(event.getId(), friends.get(i).getId(), friends.get(i).getName());
                 new AsyncTask<Void, Void, Void>() {
 
@@ -209,6 +221,7 @@ public class CreateEventActivity extends AppCompatActivity {
                     protected Void doInBackground(Void... params) {
                         try {
                             Profile.mClient.getTable(Invite.class).insert(invite).get();
+                            cleanup();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -225,6 +238,7 @@ public class CreateEventActivity extends AppCompatActivity {
             protected Void doInBackground(Void... params) {
                 try {
                     Profile.mClient.getTable(Invite.class).insert(invite).get();
+                    cleanup();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -232,6 +246,16 @@ public class CreateEventActivity extends AppCompatActivity {
             }
         }.execute();
         finish();
+    }
+
+    private void cleanup() {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                if (++numCompleteTasks == numTasks) {
+                    finish();
+                }
+            }
+        });
     }
 
     private void loadFriends() {
