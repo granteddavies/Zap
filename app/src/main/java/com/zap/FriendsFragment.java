@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
@@ -21,6 +22,7 @@ import com.microsoft.windowsazure.mobileservices.MobileServiceList;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,6 +35,8 @@ public class FriendsFragment extends Fragment {
     private FriendsAdapter adapter;
     private ProgressBar progressBar;
     private int numTasks, numCompleteTasks;
+    private RecyclerView recyclerView;
+    private TextView emptyText;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -61,9 +65,11 @@ public class FriendsFragment extends Fragment {
         Context context = view.getContext();
         adapter = new FriendsAdapter(friends, context);
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.friendList);
+        recyclerView = (RecyclerView) view.findViewById(R.id.friendList);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(adapter);
+
+        emptyText = (TextView) view.findViewById(R.id.emptyFriends);
 
         friends.clear();
         adapter.notifyDataSetChanged();
@@ -95,10 +101,6 @@ public class FriendsFragment extends Fragment {
                                     friends.add(friend);
                                 }
                             }
-
-                            // TODO: remove this test line
-                            friends.add(Profile.user);
-                            //
 
                             initializeFriends();
                         } catch (JSONException e) {
@@ -167,8 +169,14 @@ public class FriendsFragment extends Fragment {
             @Override
             public void run() {
                 if (++numCompleteTasks == numTasks) {
-                    Collections.sort(friends, new UserComparator());
                     progressBar.setVisibility(View.GONE);
+
+                    if (friends.isEmpty()) {
+                        recyclerView.setVisibility(View.GONE);
+                        emptyText.setVisibility(View.VISIBLE);
+                    }
+
+                    Collections.sort(friends, new UserComparator());
                     adapter.notifyDataSetChanged();
                 }
             }

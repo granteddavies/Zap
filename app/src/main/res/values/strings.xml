@@ -21,6 +21,7 @@
     <string name="tab_home">Home</string>
     <string name="tab_events">Events</string>
     <string name="no_events">No Events Available</string>
+    <string name="no_friends">You Have No Friends</string>
 
     <!-- Event Details Activity strings -->
     <string name="yes">YES</string>
@@ -42,5 +43,7 @@
     <string name="new_submit">Submit</string>
     <string name="no_title">You must enter a title</string>
     <string name="title_activity_create_event">New Event</string>
+    <string name="create_event_loader_title">Creating</string>
+    <string name="create_event_loader_text">Creating event, please wait</string>
 
 </resources>
