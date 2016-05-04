@@ -29,8 +29,20 @@ import com.facebook.login.LoginManager;
 
 import java.util.Calendar;
 import java.util.Date;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.gcm.*;
+import com.microsoft.windowsazure.notifications.NotificationsManager;
+import android.util.Log;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
+
+    public static MainActivity mainActivity;
+    public static Boolean isVisible = false;
+    private GoogleCloudMessaging gcm;
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -48,8 +60,27 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager mViewPager;
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        isVisible = false;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        isVisible = false;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        isVisible = true;
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
+        isVisible = true;
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -78,6 +109,10 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        mainActivity = this;
+        NotificationsManager.handleNotifications(this, NotificationSettings.SenderId, MyHandler.class);
+        registerWithNotificationHubs();
     }
 
     @Override
@@ -97,6 +132,35 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    /**
+     * Check the device to make sure it has the Google Play Services APK. If
+     * it doesn't, display a dialog that allows users to download the APK from
+     * the Google Play Store or enable it in the device's system settings.
+     */
+    private boolean checkPlayServices() {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
+                        .show();
+            } else {
+                finish();
+            }
+            return false;
+        }
+        return true;
+    }
+
+    public void registerWithNotificationHubs()
+    {
+        if (checkPlayServices()) {
+            // Start IntentService to register this application with GCM.
+            Intent intent = new Intent(this, RegistrationIntentService.class);
+            startService(intent);
         }
     }
 
@@ -149,4 +213,6 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
     }
+
+
 }
