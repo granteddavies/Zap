@@ -27,5 +27,13 @@ dependencies {
     compile 'com.android.support:design:23.2.1'
     compile 'com.android.support:support-v4:23.2.1'
     compile 'com.android.support:recyclerview-v7:23.2.1'
+    compile 'com.google.android.gms:play-services-gcm:8.4.0'
+    compile 'com.microsoft.azure:azure-notifications-handler:1.0.1@aar'
     compile 'com.microsoft.azure:azure-mobile-services-android-sdk:2.0.3'
+}
+
+repositories {
+    maven {
+        url "http://dl.bintray.com/microsoftazuremobile/SDK"
+    }
 }
