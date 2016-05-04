@@ -245,7 +245,6 @@ public class CreateEventActivity extends AppCompatActivity {
                 return null;
             }
         }.execute();
-        finish();
     }
 
     private void cleanup() {
