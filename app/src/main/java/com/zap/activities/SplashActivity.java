@@ -23,6 +23,7 @@ public class SplashActivity extends AppCompatActivity {
                     mp.start();
                     sleep(3000);
                     mp.stop();
+                    mp.release();
                 }catch(InterruptedException e){
                     e.printStackTrace();
                 }finally{
