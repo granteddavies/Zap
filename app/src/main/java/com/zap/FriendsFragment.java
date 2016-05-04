@@ -62,8 +62,6 @@ public class FriendsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        //MainActivity.currPage=0;
-
         View view = inflater.inflate(R.layout.fragment_friend_list, container, false);
 
         Context context = view.getContext();
