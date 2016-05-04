@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
+import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
 
 import java.util.Calendar;
@@ -114,6 +115,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if (Profile.user == null || AccessToken.getCurrentAccessToken() == null) {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

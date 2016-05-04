@@ -42,7 +42,8 @@ public class MyHandler extends NotificationsHandler {
                         .setStyle(new NotificationCompat.BigTextStyle()
                                 .bigText(msg))
                         .setSound(defaultSoundUri)
-                        .setContentText(msg);
+                        .setContentText(msg)
+                        .setAutoCancel(true);
 
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
