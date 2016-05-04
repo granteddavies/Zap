@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     public static Boolean isVisible = false;
     private GoogleCloudMessaging gcm;
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    public static int currPage = 1;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -85,8 +86,25 @@ public class MainActivity extends AppCompatActivity {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.setCurrentItem(1);
+        mViewPager.setCurrentItem(currPage);
         mViewPager.setOffscreenPageLimit(2);
+
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                currPage = position;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabBar);
         tabLayout.setupWithViewPager(mViewPager);
@@ -213,6 +231,4 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
     }
-
-
 }
