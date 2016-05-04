@@ -1,4 +1,4 @@
-package com.zap;
+package com.zap.models;
 
 import android.app.Activity;
 import android.os.AsyncTask;

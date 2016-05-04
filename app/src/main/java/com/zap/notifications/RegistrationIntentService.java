@@ -1,4 +1,4 @@
-package com.zap;
+package com.zap.notifications;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -9,6 +9,7 @@ import android.util.Log;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 import com.microsoft.windowsazure.messaging.NotificationHub;
+import com.zap.models.Profile;
 
 public class RegistrationIntentService extends IntentService {
 

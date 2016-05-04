@@ -1,14 +1,8 @@
-package com.zap;
+package com.zap.activities;
 
-import android.app.ActionBar;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -17,26 +11,25 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-
-import android.widget.TextView;
 
 import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
 
-import java.util.Calendar;
-import java.util.Date;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.gcm.*;
 import com.microsoft.windowsazure.notifications.NotificationsManager;
-import android.util.Log;
-import android.widget.TextView;
-import android.widget.Toast;
+import com.zap.R;
+import com.zap.fragments.EventsFragment;
+import com.zap.fragments.FriendsFragment;
+import com.zap.fragments.MainFragment;
+import com.zap.models.Profile;
+import com.zap.notifications.MyHandler;
+import com.zap.notifications.NotificationSettings;
+import com.zap.notifications.RegistrationIntentService;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -85,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         isVisible = true;
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = (ViewPager) findViewById(com.zap.R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setCurrentItem(currPage);
         mViewPager.setOffscreenPageLimit(2);

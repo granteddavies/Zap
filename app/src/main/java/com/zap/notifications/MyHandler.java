@@ -1,4 +1,4 @@
-package com.zap;
+package com.zap.notifications;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -9,6 +9,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import com.microsoft.windowsazure.notifications.NotificationsHandler;
+import com.zap.R;
+import com.zap.activities.MainActivity;
 
 public class MyHandler extends NotificationsHandler {
     public static final int NOTIFICATION_ID = 1;

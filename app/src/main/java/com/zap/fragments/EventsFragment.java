@@ -1,7 +1,6 @@
-package com.zap;
+package com.zap.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,8 +13,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.microsoft.windowsazure.mobileservices.MobileServiceList;
-
-import org.w3c.dom.Text;
+import com.zap.R;
+import com.zap.adapters.EventAdapter;
+import com.zap.models.Event;
+import com.zap.models.EventData;
+import com.zap.models.Invite;
+import com.zap.models.Profile;
 
 import java.util.ArrayList;
 import java.util.Collections;

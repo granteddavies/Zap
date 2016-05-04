@@ -5,6 +5,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/zapred"
-    tools:context=".SplashActivity">
+    tools:context=".activities.SplashActivity">
 
 </LinearLayout>

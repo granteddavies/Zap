@@ -1,13 +1,14 @@
-package com.zap;
+package com.zap.adapters;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.zap.R;
+import com.zap.models.Invite;
 
 import java.util.ArrayList;
 

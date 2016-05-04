@@ -1,4 +1,4 @@
-package com.zap;
+package com.zap.models;
 
 /**
  * Created by Grant on 4/24/2016.

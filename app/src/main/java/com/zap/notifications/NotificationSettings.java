@@ -1,4 +1,4 @@
-package com.zap;
+package com.zap.notifications;
 
 /**
  * Created by Grant on 5/3/2016.

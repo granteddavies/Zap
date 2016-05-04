@@ -1,7 +1,7 @@
-package com.zap;
+package com.zap.notifications;
 
 import android.content.Intent;
-import android.util.Log;
+
 import com.google.android.gms.iid.InstanceIDListenerService;
 
 public class MyInstanceIDService extends InstanceIDListenerService {

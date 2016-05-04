@@ -1,10 +1,11 @@
-package com.zap;
+package com.zap.activities;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import com.microsoft.windowsazure.mobileservices.*;
+
+import com.zap.R;
 
 public class SplashActivity extends AppCompatActivity {
 

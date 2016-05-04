@@ -1,4 +1,4 @@
-package com.zap;
+package com.zap.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -18,6 +18,9 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.MobileServiceList;
+import com.zap.R;
+import com.zap.models.Profile;
+import com.zap.models.User;
 
 import org.json.JSONException;
 import org.json.JSONObject;

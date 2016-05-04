@@ -1,4 +1,4 @@
-package com.zap;
+package com.zap.models;
 
 import java.util.Date;
 

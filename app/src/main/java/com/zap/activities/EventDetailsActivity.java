@@ -1,4 +1,4 @@
-package com.zap;
+package com.zap.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -19,6 +19,12 @@ import android.widget.ToggleButton;
 import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
 import com.microsoft.windowsazure.mobileservices.MobileServiceList;
+import com.zap.adapters.InviteAdapter;
+import com.zap.R;
+import com.zap.models.Event;
+import com.zap.models.EventData;
+import com.zap.models.Invite;
+import com.zap.models.Profile;
 
 import java.text.DateFormat;
 import java.util.ArrayList;

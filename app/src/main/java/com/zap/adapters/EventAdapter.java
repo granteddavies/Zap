@@ -1,4 +1,4 @@
-package com.zap;
+package com.zap.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.zap.R;
+import com.zap.activities.EventDetailsActivity;
+import com.zap.models.EventData;
+import com.zap.models.Profile;
 
 import java.util.ArrayList;
 

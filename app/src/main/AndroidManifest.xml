@@ -25,14 +25,14 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <service android:name="com.zap.MyInstanceIDService" android:exported="false">
+        <service android:name=".notifications.MyInstanceIDService" android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.gms.iid.InstanceID"/>
             </intent-filter>
         </service>
 
         <service
-            android:name="com.zap.RegistrationIntentService"
+            android:name=".notifications.RegistrationIntentService"
             android:exported="false">
         </service>
 
@@ -45,7 +45,7 @@
         </receiver>
 
         <activity
-            android:name=".SplashActivity"
+            android:name=".activities.SplashActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -55,7 +55,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".activities.LoginActivity"
             android:label="@string/title_activity_login"
             android:screenOrientation="portrait" />
         <activity
@@ -64,30 +64,30 @@
             android:label="@string/title_activity_login"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".EventDetailsActivity"
+            android:name=".activities.EventDetailsActivity"
             android:label="@string/title_activity_event_details"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.zap.MainActivity" />
+                android:value=".activities.MainActivity" />
         </activity>
         <activity
-            android:name=".CreateEventActivity"
+            android:name=".activities.CreateEventActivity"
             android:label="@string/title_activity_create_event"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/CreateEventTheme"
             android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.zap.MainActivity" />
+                android:value=".activities.MainActivity" />
         </activity>
     </application>
 
