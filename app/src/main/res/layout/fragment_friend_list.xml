@@ -7,6 +7,15 @@
     android:fitsSystemWindows="true"
     tools:context="com.zap.FriendsFragment">
 
+    <TextView
+        android:id="@+id/emptyFriends"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone"
+        android:text="@string/no_friends"
+        android:textColor="#7F7F7F"/>
+
     <ProgressBar
         android:id="@+id/friendProgress"
         android:layout_width="wrap_content"
