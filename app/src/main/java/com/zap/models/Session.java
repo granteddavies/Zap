@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 
 import com.facebook.AccessToken;
+import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.zap.activities.LoginActivity;
@@ -45,6 +46,9 @@ public final class Session {
      * @param activity the activity performing the verification
      */
     public static void verifySession(Activity activity) {
+
+        FacebookSdk.sdkInitialize(activity.getApplicationContext());
+
         if (!isValidSession()) {
             Intent intent = new Intent(activity, LoginActivity.class);
             activity.startActivity(intent);
