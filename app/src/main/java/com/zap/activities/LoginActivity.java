@@ -19,7 +19,8 @@ import com.facebook.login.widget.LoginButton;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.MobileServiceList;
 import com.zap.R;
-import com.zap.models.Profile;
+import com.zap.helpers.DialogHelper;
+import com.zap.models.Session;
 import com.zap.models.User;
 
 import org.json.JSONException;
@@ -33,36 +34,35 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        try {
-            Profile.mClient = new MobileServiceClient(
-                    "https://zap.azure-mobile.net/",
-                    "gOXIOvUOmvTWGEknrVggIjHFdmzycc64",
-                    getApplicationContext()
-            );
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
 
+        Session.instantiateBackendClient(this);
 
+        // Initialize facebook context
+        FacebookSdk.sdkInitialize(getApplicationContext());
 
-        // Check if the user is already logged in
-        if (AccessToken.getCurrentAccessToken() != null) {
-            loadProfile();
+        // Check if the user is already logged in, if so go ahead with login logic,
+        // otherwise setup the login button.
+        if (Session.isValidSession()) {
+            doLogin();
         }
+        else {
+            initializeLoginButton();
+        }
+    }
 
+    /**
+     * Sets up the login button to do start app login logic if facebook login was successful.
+     */
+    private void initializeLoginButton() {
         callbackManager = CallbackManager.Factory.create();
         loginButton = (LoginButton) findViewById(R.id.login_button);
         loginButton.setReadPermissions("user_friends");
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
 
-            //Trying to add the spinner in onSuccess
             @Override
             public void onSuccess(LoginResult loginResult) {
-                loadProfile();
+                doLogin();
             }
 
             @Override
@@ -80,38 +80,22 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode,
-                resultCode, data);
+
+        // Set up the callback manager to handle returns from facebook login
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void startMainActivity() {
-        runOnUiThread(new Runnable() {
-
-            @Override
-            public void run() {
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-    }
-
-    /*
-        The progress dialog has been added for the load profile step. Implemented functionally
-
-        Bug is we don't currently dismiss the progress bar, although it does disappear when you go to the main activity
-        When I tried to dismiss in this method after the async execute, the app would not load a profile. I could still
-        log in and out but it wouldn't go to the main activity.
-
+    /**
+     * App login logic
      */
-    private void loadProfile() {
+    private void doLogin() {
 
-        ProgressDialog progress = new ProgressDialog(LoginActivity.this);//parameter??
-        progress.setTitle(getString(R.string.loader_title));
-        progress.setMessage(getString(R.string.loader_text));
-        progress.setCancelable(false);
-        progress.show();
+        // Show progress dialog
+        DialogHelper.buildAndShowProgressDialog(this, getString(R.string.loader_title),
+                getString(R.string.loader_text));
 
+        // Get user from facebook and store in session
+        // Then initialize the user with the app backend
         new GraphRequest(
                 AccessToken.getCurrentAccessToken(),
                 "/me",
@@ -121,11 +105,8 @@ public class LoginActivity extends AppCompatActivity {
                     public void onCompleted(GraphResponse response) {
                         try {
                             JSONObject jObj = response.getJSONObject();
-
-                            Profile.user = new User(jObj.getString("name"), jObj.getString("id"));
-
-                            initializeProfile();
-
+                            Session.user = new User(jObj.getString("name"), jObj.getString("id"));
+                            initializeUser();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -134,26 +115,33 @@ public class LoginActivity extends AppCompatActivity {
         ).executeAsync();
     }
 
-    public void initializeProfile() {
+    /**
+     * Initialize user data from the backend,
+     */
+    public void initializeUser() {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
                 try {
                     final MobileServiceList<User> result =
-                            Profile.mClient.getTable(User.class).where()
-                                    .field("id").eq(Profile.user.getId())
+                            Session.mClient.getTable(User.class).where()
+                                    .field("id").eq(Session.user.getId())
                                     .execute().get();
 
+                    // If user not in backend, initialize values and insert into backend and start
+                    // the main activity
                     if (result.size() == 0) {
-                        Profile.user.setAvailable(false);
-                        Profile.user.setActivity(null);
+                        Session.user.setAvailable(false);
+                        Session.user.setActivity(null);
                         insertUser();
                     }
+                    // If user found, start the main activity
                     else if (result.size() == 1) {
-                        Profile.user = result.get(0);
+                        Session.user = result.get(0);
                         startMainActivity();
                     }
                     else {
+                        // TODO: Proper error handling
                         throw new RuntimeException("Unexpected number of matches for profile user");
                     }
                 } catch (Exception e) {
@@ -165,13 +153,17 @@ public class LoginActivity extends AppCompatActivity {
         }.execute();
     }
 
+
+    /**
+     * Inserts the logged in user into the backend then starts the main activity
+     */
     public void insertUser() {
         new AsyncTask<Void, Void, Void>() {
 
             @Override
             protected Void doInBackground(Void... params) {
                 try {
-                    Profile.mClient.getTable(User.class).insert(Profile.user).get();
+                    Session.mClient.getTable(User.class).insert(Session.user).get();
                     startMainActivity();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -179,5 +171,20 @@ public class LoginActivity extends AppCompatActivity {
                 return null;
             }
         }.execute();
+    }
+
+    /**
+     * Starts the main activity (forced to run on UI thread
+     */
+    private void startMainActivity() {
+        runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 }

@@ -11,7 +11,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.zap.R;
-import com.zap.models.Profile;
+import com.zap.models.Session;
 import com.zap.models.User;
 
 public class MainFragment extends Fragment {
@@ -53,7 +53,7 @@ public class MainFragment extends Fragment {
             }
         });
 
-        updateUI(Profile.user.getAvailable());
+        updateUI(Session.user.getAvailable());
 
         return rootView;
     }
@@ -63,7 +63,7 @@ public class MainFragment extends Fragment {
      */
     private void toggleAvailable(boolean isAvailable) {
         availabilitySwitch.setClickable(false);
-        Profile.user.setAvailable(isAvailable);
+        Session.user.setAvailable(isAvailable);
         updateUser();
     }
 
@@ -84,10 +84,10 @@ public class MainFragment extends Fragment {
             @Override
             protected Void doInBackground(Void... params) {
                 try {
-                    Profile.mClient.getTable(User.class).update(Profile.user).get();
+                    Session.mClient.getTable(User.class).update(Session.user).get();
                     getActivity().runOnUiThread(new Runnable() {
                         public void run() {
-                            updateUI(Profile.user.getAvailable());
+                            updateUI(Session.user.getAvailable());
                         }
                     });
                 } catch (Exception e) {

@@ -18,7 +18,7 @@ import com.zap.adapters.EventAdapter;
 import com.zap.models.Event;
 import com.zap.models.EventData;
 import com.zap.models.Invite;
-import com.zap.models.Profile;
+import com.zap.models.Session;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -82,8 +82,8 @@ public class EventsFragment extends Fragment {
             protected Void doInBackground(Void... params) {
                 try {
                     final MobileServiceList<Invite> result =
-                            Profile.mClient.getTable(Invite.class).where()
-                                    .field("recipientid").eq(Profile.user.getId())
+                            Session.mClient.getTable(Invite.class).where()
+                                    .field("recipientid").eq(Session.user.getId())
                                     .execute().get();
 
                     invites.clear();
@@ -109,7 +109,7 @@ public class EventsFragment extends Fragment {
                     events.clear();
                     for (final Invite invite : invites) {
                         final MobileServiceList<Event> result =
-                                Profile.mClient.getTable(Event.class).where()
+                                Session.mClient.getTable(Event.class).where()
                                         .field("id").eq(invite.getEventid())
                                         .execute().get();
 
@@ -150,10 +150,10 @@ public class EventsFragment extends Fragment {
     private class EventComparator implements Comparator<EventData> {
         @Override
         public int compare(EventData ed1, EventData ed2) {
-            if (ed1.getEvent().getHostid().equals(Profile.user.getId()) && !ed2.getEvent().getHostid().equals(Profile.user.getId())) {
+            if (ed1.getEvent().getHostid().equals(Session.user.getId()) && !ed2.getEvent().getHostid().equals(Session.user.getId())) {
                 return -1;
             }
-            if (!ed1.getEvent().getHostid().equals(Profile.user.getId()) && ed2.getEvent().getHostid().equals(Profile.user.getId())) {
+            if (!ed1.getEvent().getHostid().equals(Session.user.getId()) && ed2.getEvent().getHostid().equals(Session.user.getId())) {
                 return 1;
             }
 

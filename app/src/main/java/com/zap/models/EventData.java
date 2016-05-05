@@ -40,10 +40,10 @@ public class EventData {
             @Override
             protected Void doInBackground(Void... params) {
                 try {
-                    Profile.mClient.getTable(Event.class).insert(event).get();
+                    Session.mClient.getTable(Event.class).insert(event).get();
                     for (Invite invite : invites) {
                         invite.setEventid(event.getId());
-                        Profile.mClient.getTable(Invite.class).insert(invite).get();
+                        Session.mClient.getTable(Invite.class).insert(invite).get();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

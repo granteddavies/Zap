@@ -9,7 +9,7 @@ import android.util.Log;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 import com.microsoft.windowsazure.messaging.NotificationHub;
-import com.zap.models.Profile;
+import com.zap.models.Session;
 
 public class RegistrationIntentService extends IntentService {
 
@@ -41,7 +41,7 @@ public class RegistrationIntentService extends IntentService {
                         NotificationSettings.HubListenConnectionString, this);
                 Log.i(TAG, "Attempting to register with NH using token : " + token);
 
-                regID = hub.register(token, Profile.user.getId()).getRegistrationId();
+                regID = hub.register(token, Session.user.getId()).getRegistrationId();
 
                 // If you want to use tags...
                 // Refer to : https://azure.microsoft.com/en-us/documentation/articles/notification-hubs-routing-tag-expressions/

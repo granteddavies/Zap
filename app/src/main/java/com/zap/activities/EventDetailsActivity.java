@@ -24,7 +24,7 @@ import com.zap.R;
 import com.zap.models.Event;
 import com.zap.models.EventData;
 import com.zap.models.Invite;
-import com.zap.models.Profile;
+import com.zap.models.Session;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -51,7 +51,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_details);
 
-        if (Profile.user == null || AccessToken.getCurrentAccessToken() == null) {
+        if (Session.user == null || AccessToken.getCurrentAccessToken() == null) {
             Intent intent = new Intent(EventDetailsActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
@@ -143,7 +143,7 @@ public class EventDetailsActivity extends AppCompatActivity {
             protected Void doInBackground(Void... params) {
                 try {
                     final MobileServiceList<Event> result =
-                            Profile.mClient.getTable(Event.class).where()
+                            Session.mClient.getTable(Event.class).where()
                                     .field("id").eq(eventID)
                                     .execute().get();
 
@@ -170,14 +170,14 @@ public class EventDetailsActivity extends AppCompatActivity {
             protected Void doInBackground(Void... params) {
                 try {
                     final MobileServiceList<Invite> result =
-                            Profile.mClient.getTable(Invite.class).where()
+                            Session.mClient.getTable(Invite.class).where()
                                     .field("eventid").eq(eventData.getEvent().getId())
                                     .execute().get();
 
                     invites.clear();
                     for (int i = 0; i < result.size(); i++) {
                         Invite invite = result.get(i);
-                        if (invite.getRecipientid().equals(Profile.user.getId())) {
+                        if (invite.getRecipientid().equals(Session.user.getId())) {
                             userInvite = invite;
                         }
                         else {
@@ -246,7 +246,7 @@ public class EventDetailsActivity extends AppCompatActivity {
     }
 
     private void inflateDeleteOption() {
-        if (Profile.user.getId().equals(eventData.getEvent().getHostid())) {
+        if (Session.user.getId().equals(eventData.getEvent().getHostid())) {
             getMenuInflater().inflate(R.menu.menu_delete, menu);
         }
     }
@@ -258,7 +258,7 @@ public class EventDetailsActivity extends AppCompatActivity {
             @Override
             protected Void doInBackground(Void... params) {
                 try {
-                    Profile.mClient.getTable(Invite.class).update(userInvite).get();
+                    Session.mClient.getTable(Invite.class).update(userInvite).get();
 
                     runOnUiThread(new Runnable() {
                         public void run() {
@@ -276,7 +276,7 @@ public class EventDetailsActivity extends AppCompatActivity {
     private void updateButtonUI(String status) {
         ignoreButtonChecks = true;
 
-        if (Profile.user.getId().equals(eventData.getEvent().getHostid())) {
+        if (Session.user.getId().equals(eventData.getEvent().getHostid())) {
             toggleYes.setVisibility(View.GONE);
             toggleMaybe.setVisibility(View.GONE);
             toggleCant.setVisibility(View.GONE);
@@ -350,7 +350,7 @@ public class EventDetailsActivity extends AppCompatActivity {
             @Override
             protected Void doInBackground(Void... params) {
                 try {
-                    Profile.mClient.getTable(Event.class).delete(eventData.getEvent());
+                    Session.mClient.getTable(Event.class).delete(eventData.getEvent());
 
                     runOnUiThread(new Runnable() {
                         public void run() {
@@ -370,7 +370,7 @@ public class EventDetailsActivity extends AppCompatActivity {
                 @Override
                 protected Void doInBackground(Void... params) {
                     try {
-                        Profile.mClient.getTable(Invite.class).delete(invite);
+                        Session.mClient.getTable(Invite.class).delete(invite);
 
                         runOnUiThread(new Runnable() {
                             public void run() {
@@ -390,7 +390,7 @@ public class EventDetailsActivity extends AppCompatActivity {
             @Override
             protected Void doInBackground(Void... params) {
                 try {
-                    Profile.mClient.getTable(Invite.class).delete(userInvite);
+                    Session.mClient.getTable(Invite.class).delete(userInvite);
 
                     runOnUiThread(new Runnable() {
                         public void run() {

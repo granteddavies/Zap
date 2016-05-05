@@ -26,67 +26,52 @@ import com.zap.R;
 import com.zap.fragments.EventsFragment;
 import com.zap.fragments.FriendsFragment;
 import com.zap.fragments.MainFragment;
-import com.zap.models.Profile;
+import com.zap.models.Session;
 import com.zap.notifications.MyHandler;
 import com.zap.notifications.NotificationSettings;
 import com.zap.notifications.RegistrationIntentService;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static MainActivity mainActivity;
-    public static Boolean isVisible = false;
+    // Fields for push notification workflow
     private GoogleCloudMessaging gcm;
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+
+    // Holds the logical current page for the page viewer so the correct fragment is shown
+    // when returning from other activities
     public static int currPage = 1;
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    private ViewPager mViewPager;
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        isVisible = false;
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        isVisible = false;
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        isVisible = true;
-    }
+    private SectionsPagerAdapter sectionsPagerAdapter;
+    private ViewPager viewPager;
 
     @Override
     protected void onResume() {
         super.onResume();
-        isVisible = true;
 
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        mViewPager = (ViewPager) findViewById(com.zap.R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.setCurrentItem(currPage);
-        mViewPager.setOffscreenPageLimit(2);
+        // Initialize in on resume to force reloading of fragments every time the activity
+        // is returned to
+        initializeViewPager();
+    }
 
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+    /**
+     * Instantiates and initializes proper settings for the view pager
+     */
+    private void initializeViewPager() {
+        sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        viewPager = (ViewPager) findViewById(com.zap.R.id.container);
+        viewPager.setAdapter(sectionsPagerAdapter);
+
+        // Make sure to start at the last seen page
+        viewPager.setCurrentItem(currPage);
+
+        // Allow all pages to remain in memory when off screen
+        viewPager.setOffscreenPageLimit(sectionsPagerAdapter.getCount() - 1);
+
+        // Store the current page each time it is changed
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+                // Do nothing
             }
 
             @Override
@@ -96,12 +81,13 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
+                // Do nothing
             }
         });
 
+        // Link the tab layout to the view pager
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabBar);
-        tabLayout.setupWithViewPager(mViewPager);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     @Override
@@ -109,17 +95,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (Profile.user == null || AccessToken.getCurrentAccessToken() == null) {
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-            startActivity(intent);
-            finish();
-        }
+        Session.verifySession(this);
 
+        // Initialize toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Initialize floating action button to start the create event activity when clicked
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -128,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mainActivity = this;
+        // Setup push notifications
         NotificationsManager.handleNotifications(this, NotificationSettings.SenderId, MyHandler.class);
         registerWithNotificationHubs();
     }
@@ -143,10 +126,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.logOut:
-                LoginManager.getInstance().logOut();
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
+                Session.doLogout(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -173,6 +153,9 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Register the device with the azure backend notification hub
+     */
     public void registerWithNotificationHubs()
     {
         if (checkPlayServices()) {
@@ -183,10 +166,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
+     * Fragment page adapter implementation that is hard coded to use the fragments relevant to
+     * the app.
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        private final static int NUM_PAGES = 3;
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -194,8 +179,6 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
             switch (position) {
                 case 0:
                     // Friends
@@ -208,11 +191,6 @@ public class MainActivity extends AppCompatActivity {
                     return EventsFragment.newInstance();
             }
             return null;
-        }
-
-        @Override
-        public int getCount() {
-            return 3;
         }
 
         @Override
@@ -229,6 +207,11 @@ public class MainActivity extends AppCompatActivity {
                     return getString(R.string.tab_events);
             }
             return null;
+        }
+
+        @Override
+        public int getCount() {
+            return NUM_PAGES;
         }
     }
 }

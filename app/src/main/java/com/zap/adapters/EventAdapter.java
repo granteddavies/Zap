@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.zap.R;
 import com.zap.activities.EventDetailsActivity;
 import com.zap.models.EventData;
-import com.zap.models.Profile;
+import com.zap.models.Session;
 
 import java.util.ArrayList;
 
@@ -38,7 +38,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     public void onBindViewHolder(EventAdapter.EventViewHolder holder, int position) {
         holder.title.setText(eventList.get(position).getEvent().getTitle());
 
-        if (eventList.get(position).getEvent().getHostid().equals(Profile.user.getId())) {
+        if (eventList.get(position).getEvent().getHostid().equals(Session.user.getId())) {
             holder.status.setText("HOST");
             holder.status.setTextColor(Color.parseColor("#FF7F00"));
         }

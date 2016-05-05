@@ -8,7 +8,8 @@ import android.os.Bundle;
 import com.zap.R;
 
 public class SplashActivity extends AppCompatActivity {
-
+    // Duration to show the splash screen
+    private final static int SPLASH_MILLISECONDS = 3000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,11 +18,12 @@ public class SplashActivity extends AppCompatActivity {
 
         final MediaPlayer mp = MediaPlayer.create(this, R.raw.zap_sound_long);
 
+        // Display the splash screen for 3 seconds
         Thread timerThread = new Thread(){
             public void run(){
                 try{
                     mp.start();
-                    sleep(3000);
+                    sleep(SPLASH_MILLISECONDS);
                     mp.stop();
                 }catch(InterruptedException e){
                     e.printStackTrace();

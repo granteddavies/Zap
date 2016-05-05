@@ -28,7 +28,7 @@ import java.util.Comparator;
 
 import com.zap.R;
 import com.zap.adapters.FriendsAdapter;
-import com.zap.models.Profile;
+import com.zap.models.Session;
 import com.zap.models.User;
 
 
@@ -125,7 +125,7 @@ public class FriendsFragment extends Fragment {
                 protected Void doInBackground(Void... params) {
                     try {
                         final MobileServiceList<User> result =
-                                Profile.mClient.getTable(User.class).where()
+                                Session.mClient.getTable(User.class).where()
                                         .field("id").eq(friend.getId())
                                         .execute().get();
 

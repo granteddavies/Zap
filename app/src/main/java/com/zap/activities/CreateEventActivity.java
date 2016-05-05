@@ -31,7 +31,7 @@ import com.zap.adapters.FriendInviteAdapter;
 import com.zap.R;
 import com.zap.models.Event;
 import com.zap.models.Invite;
-import com.zap.models.Profile;
+import com.zap.models.Session;
 import com.zap.models.User;
 
 import org.json.JSONArray;
@@ -59,7 +59,7 @@ public class CreateEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
 
-        if (Profile.user == null || AccessToken.getCurrentAccessToken() == null) {
+        if (Session.user == null || AccessToken.getCurrentAccessToken() == null) {
             Intent intent = new Intent(CreateEventActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
@@ -200,14 +200,14 @@ public class CreateEventActivity extends AppCompatActivity {
         progress.setCancelable(false);
         progress.show();
 
-        final Event event = new Event(Profile.user.getId(), Profile.user.getName(), editTitle.getText().toString(),
+        final Event event = new Event(Session.user.getId(), Session.user.getName(), editTitle.getText().toString(),
                         editDescription.getText().toString(), startTime, endTime);
         new AsyncTask<Void, Void, Void>() {
 
             @Override
             protected Void doInBackground(Void... params) {
                 try {
-                    Profile.mClient.getTable(Event.class).insert(event).get();
+                    Session.mClient.getTable(Event.class).insert(event).get();
                     submitInvites(event);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -231,7 +231,7 @@ public class CreateEventActivity extends AppCompatActivity {
                     @Override
                     protected Void doInBackground(Void... params) {
                         try {
-                            Profile.mClient.getTable(Invite.class).insert(invite).get();
+                            Session.mClient.getTable(Invite.class).insert(invite).get();
                             cleanup();
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -242,13 +242,13 @@ public class CreateEventActivity extends AppCompatActivity {
             }
         }
 
-        final Invite invite = new Invite(event.getId(), Profile.user.getId(), Profile.user.getName());
+        final Invite invite = new Invite(event.getId(), Session.user.getId(), Session.user.getName());
         new AsyncTask<Void, Void, Void>() {
 
             @Override
             protected Void doInBackground(Void... params) {
                 try {
-                    Profile.mClient.getTable(Invite.class).insert(invite).get();
+                    Session.mClient.getTable(Invite.class).insert(invite).get();
                     cleanup();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -309,7 +309,7 @@ public class CreateEventActivity extends AppCompatActivity {
                 protected Void doInBackground(Void... params) {
                     try {
                         final MobileServiceList<User> result =
-                                Profile.mClient.getTable(User.class).where()
+                                Session.mClient.getTable(User.class).where()
                                         .field("id").eq(friend.getId())
                                         .execute().get();
 
