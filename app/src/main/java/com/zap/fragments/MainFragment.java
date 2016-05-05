@@ -1,5 +1,6 @@
 package com.zap.fragments;
 
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -72,9 +73,11 @@ public class MainFragment extends Fragment {
         availabilitySwitch.setChecked(isAvailable);
         if (isAvailable) {
             availabilityText.setText(getString(R.string.available));
+            availabilityText.setTextColor(Color.GREEN);
         }
         else {
             availabilityText.setText(getString(R.string.unavailable));
+            availabilityText.setTextColor(Color.RED);
         }
     }
 
