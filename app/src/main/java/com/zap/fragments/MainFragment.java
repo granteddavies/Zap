@@ -73,11 +73,9 @@ public class MainFragment extends Fragment {
         availabilitySwitch.setChecked(isAvailable);
         if (isAvailable) {
             availabilityText.setText(getString(R.string.available));
-            availabilityText.setTextColor(Color.GREEN);
         }
         else {
             availabilityText.setText(getString(R.string.unavailable));
-            availabilityText.setTextColor(Color.RED);
         }
     }
 

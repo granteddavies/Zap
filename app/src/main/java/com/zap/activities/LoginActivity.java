@@ -167,6 +167,7 @@ public class LoginActivity extends AppCompatActivity {
                     Session.mClient.getTable(User.class).insert(Session.user).get();
                     startMainActivity();
                 } catch (Exception e) {
+                    // TODO: Proper error handling
                     e.printStackTrace();
                 }
                 return null;
