@@ -34,16 +34,17 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-
-        Session.instantiateBackendClient(this);
 
         // Initialize facebook context
         FacebookSdk.sdkInitialize(getApplicationContext());
 
+        setContentView(R.layout.activity_login);
+
+        Session.instantiateBackendClient(this);
+
         // Check if the user is already logged in, if so go ahead with login logic,
         // otherwise setup the login button.
-        if (Session.isValidSession()) {
+        if (Session.isFacebookSessionValid()) {
             doLogin();
         }
         else {

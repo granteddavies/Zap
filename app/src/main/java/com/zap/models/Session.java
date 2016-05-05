@@ -17,7 +17,19 @@ public final class Session {
     public static User user;
     public static MobileServiceClient mClient;
 
-    public static boolean isValidSession() {
+    /**
+     * Returns whether the user's token with facebook is valid
+     * @return true if the token is valid, false otherwise
+     */
+    public static boolean isFacebookSessionValid() {
+        return AccessToken.getCurrentAccessToken() != null;
+    }
+
+    /**
+     * Returns whether all session values are valid
+     * @return true if all values are valid, false otherwise
+     */
+    private static boolean isValidSession() {
         if (AccessToken.getCurrentAccessToken() != null
                 && user != null
                 && mClient != null) {
