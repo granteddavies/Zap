@@ -25,6 +25,7 @@ public class SplashActivity extends AppCompatActivity {
                     mp.start();
                     sleep(SPLASH_MILLISECONDS);
                     mp.stop();
+                    mp.release();
                 }catch(InterruptedException e){
                     e.printStackTrace();
                 }finally{
